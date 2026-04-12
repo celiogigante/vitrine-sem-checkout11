@@ -13,7 +13,7 @@ const Header = () => {
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link to="/" className="flex items-center gap-2 font-bold text-xl tracking-tight">
           <Smartphone className="h-6 w-6 text-accent" />
-          <span>CellStore</span>
+          <span>Master Cell</span>
         </Link>
 
         {/* Desktop nav */}
