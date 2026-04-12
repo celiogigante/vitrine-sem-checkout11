@@ -8,7 +8,7 @@ const Footer = () => (
         <div>
           <div className="flex items-center gap-2 font-bold text-lg mb-2">
             <Smartphone className="h-5 w-5 text-accent" />
-            CellStore
+            Master Cell
           </div>
           <p className="text-sm text-muted-foreground max-w-xs">
             Celulares seminovos testados e com garantia. Qualidade e confiança para você.
@@ -32,7 +32,7 @@ const Footer = () => (
         </div>
       </div>
       <div className="border-t mt-8 pt-6 text-center text-xs text-muted-foreground">
-        © {new Date().getFullYear()} CellStore. Todos os direitos reservados.
+        © {new Date().getFullYear()} Master Cell. Todos os direitos reservados.
       </div>
     </div>
   </footer>
