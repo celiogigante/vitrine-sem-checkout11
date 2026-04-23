@@ -1,13 +1,36 @@
 import { Link } from "react-router-dom";
-import { Shield, CheckCircle, Headphones, ArrowRight, MessageCircle } from "lucide-react";
+import { Shield, CheckCircle, Headphones, ArrowRight, MessageCircle, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ProductCard from "@/components/ProductCard";
-import { getProducts } from "@/lib/products";
+import { useEffect, useState } from "react";
+import { supabase, type Product } from "@/lib/supabase";
 
 const Home = () => {
-  const products = getProducts();
+  const [products, setProducts] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    loadProducts();
+  }, []);
+
+  const loadProducts = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("products")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) throw error;
+      setProducts((data || []) as Product[]);
+    } catch (err) {
+      console.error("Erro ao carregar produtos:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const featured = products.filter(p => p.featured).slice(0, 4);
-  const mostViewed = [...products].sort((a, b) => b.views - a.views).slice(0, 4);
+  const mostViewed = [...products].sort((a, b) => (b.views || 0) - (a.views || 0)).slice(0, 4);
 
   return (
     <div>
@@ -65,17 +88,37 @@ const Home = () => {
             Ver todos <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {featured.map(p => <ProductCard key={p.id} product={p} />)}
-        </div>
+        {isLoading ? (
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+          </div>
+        ) : featured.length > 0 ? (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {featured.map(p => <ProductCard key={p.id} product={p} />)}
+          </div>
+        ) : (
+          <div className="text-center py-8 text-muted-foreground">
+            Nenhum produto em destaque no momento
+          </div>
+        )}
       </section>
 
       {/* Most Viewed */}
       <section className="container mx-auto px-4 pb-16">
         <h2 className="text-2xl font-bold mb-8">Mais vistos</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {mostViewed.map(p => <ProductCard key={p.id} product={p} />)}
-        </div>
+        {isLoading ? (
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+          </div>
+        ) : mostViewed.length > 0 ? (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {mostViewed.map(p => <ProductCard key={p.id} product={p} />)}
+          </div>
+        ) : (
+          <div className="text-center py-8 text-muted-foreground">
+            Nenhum produto encontrado
+          </div>
+        )}
       </section>
     </div>
   );

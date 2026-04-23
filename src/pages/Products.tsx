@@ -1,16 +1,41 @@
-import { useState, useMemo } from "react";
-import { Search, SlidersHorizontal } from "lucide-react";
+import { useState, useMemo, useEffect } from "react";
+import { Search, SlidersHorizontal, Loader2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import ProductCard from "@/components/ProductCard";
-import { getProducts, BRANDS, CONDITIONS, conditionLabel } from "@/lib/products";
+import { conditionLabel } from "@/lib/productHelpers";
+import { supabase, type Product } from "@/lib/supabase";
+
+const BRANDS = ["Apple", "Samsung", "Motorola", "Xiaomi", "Google", "OnePlus"];
+const CONDITIONS = ["novo", "seminovo", "excelente", "bom", "regular"] as const;
 
 const Products = () => {
-  const products = getProducts();
+  const [products, setProducts] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [brand, setBrand] = useState("all");
   const [condition, setCondition] = useState("all");
   const [sort, setSort] = useState("recent");
+
+  useEffect(() => {
+    loadProducts();
+  }, []);
+
+  const loadProducts = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("products")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) throw error;
+      setProducts((data || []) as Product[]);
+    } catch (err) {
+      console.error("Erro ao carregar produtos:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const filtered = useMemo(() => {
     let list = products.filter(p => {
@@ -62,14 +87,23 @@ const Products = () => {
         </Select>
       </div>
 
-      {filtered.length === 0 ? (
+      {isLoading ? (
+        <div className="flex items-center justify-center py-20">
+          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+        </div>
+      ) : filtered.length === 0 ? (
         <div className="text-center py-20 text-muted-foreground">
           <p className="text-lg">Nenhum produto encontrado.</p>
           <p className="text-sm">Tente ajustar os filtros.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {filtered.map(p => <ProductCard key={p.id} product={p} />)}
+        <div>
+          <p className="text-sm text-muted-foreground mb-4">
+            {filtered.length} produto{filtered.length !== 1 ? "s" : ""} encontrado{filtered.length !== 1 ? "s" : ""}
+          </p>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {filtered.map(p => <ProductCard key={p.id} product={p} />)}
+          </div>
         </div>
       )}
     </div>

@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import { ImageUpload } from "@/components/ImageUpload";
 import { Pencil, Trash2, Plus, LogOut, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -270,11 +271,17 @@ export default function AdminDashboard() {
                 ))}
               </SelectContent>
             </Select>
-            <Input
-              placeholder="URL da imagem principal"
-              value={form.images[0]}
-              onChange={(e) => setForm({ ...form, images: [e.target.value] })}
-            />
+            <div className="md:col-span-2">
+              <label className="text-sm font-medium mb-2 block">Imagem do Produto</label>
+              <ImageUpload
+                onImageUrl={(url) => setForm({ ...form, images: [url] })}
+              />
+              {form.images[0] && (
+                <div className="mt-2 rounded-lg overflow-hidden border">
+                  <img src={form.images[0]} alt="Preview" className="w-full h-32 object-cover" />
+                </div>
+              )}
+            </div>
           </div>
           <Textarea
             placeholder="Descrição"
