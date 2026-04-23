@@ -43,6 +43,7 @@ const ProductDetail = () => {
           generalState: data.general_condition,
           slug: data.slug || data.id,
           images: data.images || [],
+          videoUrl: data.video_url,
           specs: data.specs || {},
           featured: data.featured,
           promotion: data.promotion,
@@ -91,16 +92,26 @@ const ProductDetail = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
         <div className="space-y-4">
-          <div className={`aspect-square overflow-hidden rounded-xl border bg-secondary ${sold ? "opacity-70" : ""}`}>
-            <img src={product.images[selectedImage]} alt={product.name} className="h-full w-full object-cover" />
-          </div>
-          {product.images.length > 1 && (
-            <div className="flex gap-2 flex-wrap">
-              {product.images.map((img, i) => (
-                <button key={i} onClick={() => setSelectedImage(i)} className={`h-16 w-16 rounded-lg border overflow-hidden ${i === selectedImage ? "ring-2 ring-primary" : ""}`}>
-                  <img src={img} alt="" className="h-full w-full object-cover" />
-                </button>
-              ))}
+          {product.images.length > 0 ? (
+            <>
+              <div className={`aspect-square overflow-hidden rounded-xl border bg-secondary ${sold ? "opacity-70" : ""}`}>
+                <img src={product.images[selectedImage]} alt={product.name} className="h-full w-full object-cover" />
+              </div>
+              {product.images.length > 1 && (
+                <div className="flex gap-2 flex-wrap">
+                  {product.images.map((img, i) => (
+                    <button key={i} onClick={() => setSelectedImage(i)} className={`h-16 w-16 rounded-lg border overflow-hidden ${i === selectedImage ? "ring-2 ring-primary" : ""}`}>
+                      <img src={img} alt="" className="h-full w-full object-cover" />
+                    </button>
+                  ))}
+                </div>
+              )}
+            </>
+          ) : null}
+
+          {product.videoUrl && (
+            <div className="rounded-xl border overflow-hidden bg-black">
+              <video src={product.videoUrl} controls className="w-full h-auto max-h-96" />
             </div>
           )}
         </div>

@@ -44,7 +44,8 @@ export default function AdminDashboard() {
     original_price: undefined as number | undefined,
     description: "",
     condition: "seminovo",
-    images: [""],
+    images: [] as string[],
+    video_url: "",
     specs: {} as Record<string, string>,
     featured: false,
     promotion: false,
@@ -92,6 +93,7 @@ export default function AdminDashboard() {
         description: form.description,
         condition: form.condition,
         images: form.images.filter((i) => i.trim()),
+        video_url: form.video_url || null,
         specs: form.specs,
         featured: form.featured,
         promotion: form.promotion,
@@ -133,7 +135,8 @@ export default function AdminDashboard() {
       original_price: product.original_price,
       description: product.description,
       condition: product.condition,
-      images: product.images.length ? product.images : [""],
+      images: product.images && product.images.length ? product.images : [],
+      video_url: product.video_url || "",
       specs: product.specs,
       featured: product.featured,
       promotion: product.promotion,
@@ -169,7 +172,8 @@ export default function AdminDashboard() {
       original_price: undefined,
       description: "",
       condition: "seminovo",
-      images: [""],
+      images: [],
+      video_url: "",
       specs: {},
       featured: false,
       promotion: false,
@@ -272,15 +276,12 @@ export default function AdminDashboard() {
               </SelectContent>
             </Select>
             <div className="md:col-span-2">
-              <label className="text-sm font-medium mb-2 block">Imagem do Produto</label>
               <ImageUpload
-                onImageUrl={(url) => setForm({ ...form, images: [url] })}
+                onImagesUrls={(urls) => setForm({ ...form, images: urls })}
+                onVideoUrl={(url) => setForm({ ...form, video_url: url })}
+                currentImages={form.images}
+                currentVideo={form.video_url}
               />
-              {form.images[0] && (
-                <div className="mt-2 rounded-lg overflow-hidden border">
-                  <img src={form.images[0]} alt="Preview" className="w-full h-32 object-cover" />
-                </div>
-              )}
             </div>
           </div>
           <Textarea
