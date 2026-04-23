@@ -121,11 +121,11 @@ const Home = () => {
       {/* Brand filter */}
       <section className="container mx-auto px-4 pt-12">
         <div className="flex flex-wrap gap-2 justify-center">
-          <button onClick={() => setBrandFilter("all")}>
+          <button onClick={() => setBrandFilter("all")} className="px-4 py-2 rounded-full border border-gray-300 bg-white hover:bg-gray-100 text-sm font-medium transition-colors">
             Todas
           </button>
           {BRANDS.map((b) => (
-            <button key={b} onClick={() => setBrandFilter(b)}>
+            <button key={b} onClick={() => setBrandFilter(b)} className="px-4 py-2 rounded-full border border-gray-300 bg-white hover:bg-gray-100 text-sm font-medium transition-colors">
               {b}
             </button>
           ))}
