@@ -3,19 +3,75 @@ import { useEffect, useState } from "react";
 import { ArrowLeft, MessageCircle, Shield, CheckCircle, BatteryFull } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { getProduct, incrementViews, conditionLabel, conditionColor, getWhatsAppLink, statusLabel, statusColor, type Product } from "@/lib/products";
+import { conditionLabel, conditionColor, getWhatsAppLink, statusLabel, statusColor, type Product } from "@/lib/products";
+import { supabase } from "@/lib/supabase";
 
 const ProductDetail = () => {
   const { id } = useParams();
   const [product, setProduct] = useState<Product | undefined>();
   const [selectedImage, setSelectedImage] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (id) {
-      incrementViews(id);
-      setProduct(getProduct(id));
+      loadProduct(id);
     }
   }, [id]);
+
+  const loadProduct = async (productId: string) => {
+    try {
+      setIsLoading(true);
+      const { data, error } = await supabase
+        .from("products")
+        .select("*")
+        .eq("id", productId)
+        .single();
+
+      if (error) throw error;
+
+      if (data) {
+        const product: Product = {
+          id: data.id,
+          name: data.name,
+          brand: data.brand,
+          price: data.price,
+          originalPrice: data.original_price,
+          description: data.description,
+          condition: data.condition,
+          status: data.status || "disponivel",
+          battery: data.battery_percentage,
+          generalState: data.general_condition,
+          slug: data.slug || data.id,
+          images: data.images || [],
+          videoUrl: data.video_url,
+          specs: data.specs || {},
+          featured: data.featured,
+          promotion: data.promotion,
+          views: data.views,
+          createdAt: data.created_at,
+        };
+        setProduct(product);
+
+        // Increment views
+        await supabase
+          .from("products")
+          .update({ views: (data.views || 0) + 1 })
+          .eq("id", productId);
+      }
+    } catch (err) {
+      console.error("Error loading product:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  if (isLoading) {
+    return (
+      <div className="container mx-auto px-4 py-20 text-center">
+        <p className="text-lg text-muted-foreground">Carregando produto...</p>
+      </div>
+    );
+  }
 
   if (!product) {
     return (
@@ -36,16 +92,33 @@ const ProductDetail = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
         <div className="space-y-4">
-          <div className={`aspect-square overflow-hidden rounded-xl border bg-secondary ${sold ? "opacity-70" : ""}`}>
-            <img src={product.images[selectedImage]} alt={product.name} className="h-full w-full object-cover" />
-          </div>
-          {product.images.length > 1 && (
-            <div className="flex gap-2 flex-wrap">
-              {product.images.map((img, i) => (
-                <button key={i} onClick={() => setSelectedImage(i)} className={`h-16 w-16 rounded-lg border overflow-hidden ${i === selectedImage ? "ring-2 ring-primary" : ""}`}>
-                  <img src={img} alt="" className="h-full w-full object-cover" />
-                </button>
-              ))}
+          {product.images.length > 0 ? (
+            <>
+              <div className={`aspect-square overflow-hidden rounded-xl border bg-secondary ${sold ? "opacity-70" : ""}`}>
+                <img src={product.images[selectedImage]} alt={product.name} className="h-full w-full object-cover" />
+              </div>
+              {product.images.length > 1 && (
+                <div className="flex gap-2 flex-wrap">
+                  {product.images.map((img, i) => (
+                    <button key={i} onClick={() => setSelectedImage(i)} className={`h-16 w-16 rounded-lg border overflow-hidden ${i === selectedImage ? "ring-2 ring-primary" : ""}`}>
+                      <img src={img} alt="" className="h-full w-full object-cover" />
+                    </button>
+                  ))}
+                </div>
+              )}
+            </>
+          ) : null}
+
+          {product.videoUrl && (
+            <div className="rounded-xl border overflow-hidden bg-black">
+              <iframe
+                src={product.videoUrl}
+                title="Product video"
+                className="w-full h-96"
+                allowFullScreen
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              />
             </div>
           )}
         </div>

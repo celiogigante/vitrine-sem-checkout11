@@ -19,6 +19,7 @@ export interface Product {
   description: string;
   condition: "novo" | "seminovo" | "excelente" | "bom" | "regular";
   images: string[];
+  video_url?: string;
   specs: Record<string, string>;
   featured: boolean;
   promotion: boolean;

@@ -13,6 +13,7 @@ export interface Product {
   generalState?: string;
   slug: string;
   images: string[];
+  videoUrl?: string;
   specs: Record<string, string>;
   featured: boolean;
   promotion: boolean;
