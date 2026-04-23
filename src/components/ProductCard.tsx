@@ -23,7 +23,7 @@ const ProductCard = ({ product }: { product: Product }) => {
     >
       <Link
         to={`/produto/${product.id}`}
-        className="block relative aspect-square overflow-hidden bg-secondary"
+        className="block relative aspect-video overflow-hidden bg-secondary"
       >
         <img
           src={product.images[0]}
