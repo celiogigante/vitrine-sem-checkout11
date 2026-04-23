@@ -111,7 +111,14 @@ const ProductDetail = () => {
 
           {product.videoUrl && (
             <div className="rounded-xl border overflow-hidden bg-black">
-              <video src={product.videoUrl} controls className="w-full h-auto max-h-96" />
+              <iframe
+                src={product.videoUrl}
+                title="Product video"
+                className="w-full h-96"
+                allowFullScreen
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              />
             </div>
           )}
         </div>
