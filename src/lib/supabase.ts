@@ -1,0 +1,68 @@
+import { createClient } from "@supabase/supabase-js";
+
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+if (!supabaseUrl || !supabaseAnonKey) {
+  throw new Error("Missing Supabase environment variables");
+}
+
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+// Tipos para as tabelas
+export interface Product {
+  id: string;
+  name: string;
+  brand: string;
+  price: number;
+  original_price?: number;
+  description: string;
+  condition: "novo" | "seminovo" | "excelente" | "bom" | "regular";
+  images: string[];
+  specs: Record<string, string>;
+  featured: boolean;
+  promotion: boolean;
+  views: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface SiteConfig {
+  id: string;
+  whatsapp_number: string;
+  banner_title: string;
+  banner_subtitle: string;
+  banner_image?: string;
+  brand_name: string;
+  is_store_mode: boolean;
+  is_customer_registration_enabled: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Customer {
+  id: string;
+  user_id?: string;
+  email?: string;
+  phone?: string;
+  name: string;
+  address?: string;
+  city?: string;
+  state?: string;
+  zip_code?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Order {
+  id: string;
+  customer_id: string;
+  total_price: number;
+  status: "pending" | "confirmed" | "shipped" | "delivered" | "cancelled";
+  items: unknown[];
+  payment_method?: string;
+  shipping_tracking_number?: string;
+  notes?: string;
+  created_at: string;
+  updated_at: string;
+}
