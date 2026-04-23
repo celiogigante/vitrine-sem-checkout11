@@ -91,7 +91,7 @@ const Home = () => {
             </p>
 
             <div className="flex flex-wrap gap-3">
-              <Button asChild size="lg">
+              <Button asChild size="lg" className="border-2 border-white bg-transparent text-white hover:bg-white/10">
                 <Link to="/produtos">
                   Ver catálogo <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
