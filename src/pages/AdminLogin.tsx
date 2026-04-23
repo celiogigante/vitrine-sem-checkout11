@@ -4,13 +4,15 @@ import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { Lock, Loader2 } from "lucide-react";
+import { Lock, Loader2, User } from "lucide-react";
 
 export default function AdminLogin() {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -63,6 +65,78 @@ export default function AdminLogin() {
     }
   };
 
+  const handleSignUp = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!email || !password || !passwordConfirm) {
+      toast({
+        title: "Preencha todos os campos",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (password !== passwordConfirm) {
+      toast({
+        title: "As senhas não correspondem",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (password.length < 6) {
+      toast({
+        title: "Senha deve ter pelo menos 6 caracteres",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            is_admin: false, // Novos usuários não são admin por padrão
+          },
+        },
+      });
+
+      if (error) {
+        toast({
+          title: "Erro ao criar conta",
+          description: error.message,
+          variant: "destructive",
+        });
+        return;
+      }
+
+      toast({
+        title: "Conta criada com sucesso!",
+        description: "Você será redirecionado em instantes...",
+      });
+
+      // Limpar formulário e voltar para login
+      setTimeout(() => {
+        setEmail("");
+        setPassword("");
+        setPasswordConfirm("");
+        setIsLogin(true);
+      }, 2000);
+    } catch (err) {
+      console.error("Sign up error:", err);
+      toast({
+        title: "Erro inesperado",
+        description: "Tente novamente mais tarde",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-background to-secondary/20 px-4">
       <div className="w-full max-w-sm space-y-6 p-8 rounded-2xl border bg-card shadow-lg">
@@ -72,16 +146,16 @@ export default function AdminLogin() {
           </div>
           <h1 className="text-2xl font-bold">Painel Admin</h1>
           <p className="text-sm text-muted-foreground">
-            Faça login com suas credenciais
+            {isLogin ? "Faça login com suas credenciais" : "Criar uma nova conta"}
           </p>
         </div>
 
-        <form onSubmit={handleLogin} className="space-y-4">
+        <form onSubmit={isLogin ? handleLogin : handleSignUp} className="space-y-4">
           <div className="space-y-2">
             <label className="text-sm font-medium">Email</label>
             <Input
               type="email"
-              placeholder="celiommn@gmail.com"
+              placeholder="seu@email.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               disabled={isLoading}
@@ -96,24 +170,68 @@ export default function AdminLogin() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               disabled={isLoading}
-              onKeyDown={(e) => e.key === "Enter" && handleLogin(e as any)}
             />
           </div>
+
+          {!isLogin && (
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Confirmar Senha</label>
+              <Input
+                type="password"
+                placeholder="Confirme sua senha"
+                value={passwordConfirm}
+                onChange={(e) => setPasswordConfirm(e.target.value)}
+                disabled={isLoading}
+                onKeyDown={(e) => e.key === "Enter" && handleSignUp(e as any)}
+              />
+            </div>
+          )}
 
           <Button type="submit" disabled={isLoading} size="lg" className="w-full">
             {isLoading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Entrando...
+                {isLogin ? "Entrando..." : "Criando conta..."}
               </>
-            ) : (
+            ) : isLogin ? (
               "Entrar"
+            ) : (
+              <>
+                <User className="mr-2 h-4 w-4" />
+                Criar Conta
+              </>
             )}
           </Button>
         </form>
 
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-muted"></div>
+          </div>
+          <div className="relative flex justify-center text-sm">
+            <span className="px-2 bg-card text-muted-foreground">
+              {isLogin ? "Não tem conta?" : "Já tem conta?"}
+            </span>
+          </div>
+        </div>
+
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => {
+            setIsLogin(!isLogin);
+            setEmail("");
+            setPassword("");
+            setPasswordConfirm("");
+          }}
+          disabled={isLoading}
+          className="w-full"
+        >
+          {isLogin ? "Criar conta" : "Fazer login"}
+        </Button>
+
         <p className="text-xs text-center text-muted-foreground">
-          Apenas administradores podem acessar este painel
+          Apenas administradores podem acessar o painel completo
         </p>
       </div>
     </div>
