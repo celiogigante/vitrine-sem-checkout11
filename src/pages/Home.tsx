@@ -91,13 +91,13 @@ const Home = () => {
             </p>
 
             <div className="flex flex-wrap gap-3">
-              <Button asChild size="lg" className="border-2 border-white bg-transparent text-white hover:bg-white/10">
+              <Button asChild size="lg" className="border-2 border-yellow-400 bg-transparent text-yellow-300 hover:bg-yellow-400/10">
                 <Link to="/produtos">
                   Ver catálogo <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
 
-              <Button asChild size="lg" className="bg-white text-primary hover:bg-white/90">
+              <Button asChild size="lg" className="bg-yellow-400 text-black hover:bg-yellow-300">
                 <a
                   href={`https://wa.me/${s.whatsappNumber}`}
                   target="_blank"
