@@ -83,10 +83,10 @@ const Home = () => {
         />
         <div className="container mx-auto px-4 py-20 md:py-28 relative grid md:grid-cols-2 gap-10 items-center">
           <div className="space-y-6">
-            <h1 className="text-4xl md:text-5xl font-extrabold">
+            <h1 className="text-4xl md:text-5xl font-extrabold text-yellow-300">
               {s.heroTitle}
             </h1>
-            <p className="text-lg opacity-80 max-w-lg">
+            <p className="text-lg opacity-80 max-w-lg text-yellow-100">
               {s.heroSubtitle}
             </p>
 
