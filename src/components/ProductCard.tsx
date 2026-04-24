@@ -73,7 +73,7 @@ const ProductCard = ({ product }: { product: Product }) => {
         </div>
 
         <div className="flex gap-2">
-          <Button asChild size="sm" variant="outline" className="flex-1">
+          <Button asChild size="sm" variant="outline" className="flex-1 h-9">
             <Link to={`/produto/${product.id}`}>Ver detalhes</Link>
           </Button>
 
@@ -81,7 +81,7 @@ const ProductCard = ({ product }: { product: Product }) => {
             <Button
               asChild
               size="sm"
-              className="bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground"
+              className="bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground h-9 w-9"
             >
               <a
                 href={getWhatsAppLink(product)}

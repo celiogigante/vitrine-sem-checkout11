@@ -48,14 +48,9 @@ const Header = () => {
           </Button>
 
           {user && isAdmin && (
-            <Link
-              to="/admin"
-              className={`text-sm font-medium transition-colors hover:text-yellow-300 ${
-                isActive("/admin") ? "text-yellow-400" : "text-yellow-200"
-              }`}
-            >
-              Painel
-            </Link>
+            <Button asChild size="sm" className="border border-yellow-400 bg-transparent text-yellow-400 hover:bg-yellow-400/10">
+              <Link to="/admin">Painel</Link>
+            </Button>
           )}
 
           <Button
@@ -105,30 +100,24 @@ const Header = () => {
       {/* Mobile nav */}
       {open && (
         <nav className="md:hidden border-t bg-black px-4 pb-4 pt-2 space-y-2">
-          <Link
-            to="/"
-            onClick={() => setOpen(false)}
-            className="block py-2 text-sm font-medium text-yellow-400"
-          >
-            Início
-          </Link>
+          <Button asChild size="sm" className="w-full border border-yellow-400 bg-transparent text-yellow-400 hover:bg-yellow-400/10">
+            <Link to="/" onClick={() => setOpen(false)}>
+              Início
+            </Link>
+          </Button>
 
-          <Link
-            to="/produtos"
-            onClick={() => setOpen(false)}
-            className="block py-2 text-sm font-medium text-yellow-400"
-          >
-            Produtos
-          </Link>
+          <Button asChild size="sm" className="w-full border border-yellow-400 bg-transparent text-yellow-400 hover:bg-yellow-400/10">
+            <Link to="/produtos" onClick={() => setOpen(false)}>
+              Produtos
+            </Link>
+          </Button>
 
           {user && isAdmin && (
-            <Link
-              to="/admin"
-              onClick={() => setOpen(false)}
-              className="block py-2 text-sm font-medium text-yellow-400"
-            >
-              Painel Admin
-            </Link>
+            <Button asChild size="sm" className="w-full border border-yellow-400 bg-transparent text-yellow-400 hover:bg-yellow-400/10">
+              <Link to="/admin" onClick={() => setOpen(false)}>
+                Painel Admin
+              </Link>
+            </Button>
           )}
 
           <Button
