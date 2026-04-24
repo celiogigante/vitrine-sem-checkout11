@@ -69,7 +69,7 @@ const Header = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 backdrop-blur-lg" style={{ backgroundColor: '#000000', borderBottom: '2px solid #FFF9E6' }}>
+    <header className="sticky top-0 z-50 backdrop-blur-lg" style={{ backgroundColor: '#000000', borderBottom: '2px solid #fcd34d' }}>
       <div className="container mx-auto flex h-24 items-center justify-between px-4 gap-4">
         <Link to="/" className="flex items-center gap-2 flex-shrink-0">
           <img
