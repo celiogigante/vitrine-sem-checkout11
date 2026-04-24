@@ -171,7 +171,7 @@ export interface SiteSettings {
 const SETTINGS_KEY = "cellstore_settings";
 
 const defaultSettings: SiteSettings = {
-  whatsappNumber: "5511999999999",
+  whatsappNumber: "5566992473929",
   heroTitle: "Celulares seminovos com garantia e qualidade",
   heroSubtitle: "Aparelhos testados, revisados e prontos para uso. Economize até 50% comprando seminovos com segurança.",
   heroImage: "",
@@ -193,8 +193,8 @@ const defaultSettings: SiteSettings = {
   footerName: "Master Cell",
   footerDesc: "Celulares seminovos testados e com garantia. Qualidade e confiança para você.",
   footerEmail: "contato@mastercell.com.br",
-  footerPhone: "(11) 99999-9999",
-  footerInstagram: "@mastercell",
+  footerPhone: "(66) 99247-3929",
+  footerInstagram: "@mastercellbg",
 };
 
 export function getSettings(): SiteSettings {
