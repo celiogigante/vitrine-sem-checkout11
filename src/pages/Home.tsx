@@ -100,30 +100,16 @@ const Home = () => {
       {/* Hero */}
       <section className="relative overflow-hidden text-white bg-black" style={{ minHeight: "600px" }}>
         <div className="container mx-auto px-4 py-0 relative h-full">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 h-full items-center">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-8 h-full items-center">
             {/* Left side - Logo/Image (30%) */}
-            <div className="flex flex-col items-center justify-center py-12 md:py-0">
-              {heroConfig?.hero_logo_url ? (
+            <div className="flex items-center justify-center py-12 md:py-0 md:col-span-1">
+              {heroConfig?.hero_logo_url || heroConfig?.hero_image_url ? (
                 <img
-                  src={heroConfig.hero_logo_url}
+                  src={heroConfig.hero_logo_url || heroConfig.hero_image_url}
                   alt={heroConfig.hero_name}
-                  className="h-auto w-full max-w-xs mb-6"
-                />
-              ) : (
-                <div className="w-full max-w-xs h-32 bg-gray-800 rounded flex items-center justify-center mb-6">
-                  <span className="text-gray-600">Logo não configurado</span>
-                </div>
-              )}
-
-              {heroConfig?.hero_image_url && (
-                <img
-                  src={heroConfig.hero_image_url}
-                  alt="Hero"
                   className="h-auto w-full max-w-xs rounded-lg shadow-xl"
                 />
-              )}
-
-              {!heroConfig?.hero_image_url && (
+              ) : (
                 <div className="w-full max-w-xs h-64 bg-gray-800 rounded flex items-center justify-center">
                   <span className="text-gray-600">Imagem não configurada</span>
                 </div>
@@ -131,7 +117,7 @@ const Home = () => {
             </div>
 
             {/* Right side - Carousel (70%) */}
-            <div className="md:col-span-2 flex flex-col items-center justify-center py-12 md:py-0 h-96 md:h-auto">
+            <div className="flex flex-col items-center justify-center py-12 md:py-0 md:col-span-4">
               <div className="w-full mb-6">
                 <h2 className="text-2xl font-bold text-center md:text-left">
                   {heroConfig?.carousel_title || "Destaques"}

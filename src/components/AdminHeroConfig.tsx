@@ -22,7 +22,6 @@ export default function AdminHeroConfig() {
   const [form, setForm] = useState({
     hero_name: "",
     hero_image_url: "",
-    hero_logo_url: "",
     carousel_title: "",
   });
 
@@ -45,8 +44,7 @@ export default function AdminHeroConfig() {
         setConfig(data as HeroConfig);
         setForm({
           hero_name: data.hero_name || "",
-          hero_image_url: data.hero_image_url || "",
-          hero_logo_url: data.hero_logo_url || "",
+          hero_image_url: data.hero_image_url || data.hero_logo_url || "",
           carousel_title: data.carousel_title || "",
         });
       }
@@ -78,7 +76,6 @@ export default function AdminHeroConfig() {
           .update({
             hero_name: form.hero_name,
             hero_image_url: form.hero_image_url || null,
-            hero_logo_url: form.hero_logo_url || null,
             carousel_title: form.carousel_title,
           })
           .eq("id", config.id);
@@ -89,7 +86,6 @@ export default function AdminHeroConfig() {
           {
             hero_name: form.hero_name,
             hero_image_url: form.hero_image_url || null,
-            hero_logo_url: form.hero_logo_url || null,
             carousel_title: form.carousel_title,
           },
         ]);
@@ -143,28 +139,10 @@ export default function AdminHeroConfig() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2">Logo do Hero</label>
-          <div className="space-y-2">
-            {form.hero_logo_url && (
-              <div className="flex items-center gap-2">
-                <img
-                  src={form.hero_logo_url}
-                  alt="Hero Logo"
-                  className="h-16 w-auto rounded border"
-                />
-              </div>
-            )}
-            <ImageUpload
-              onImagesUrls={(urls) =>
-                setForm({ ...form, hero_logo_url: urls[0] || "" })
-              }
-              currentImages={form.hero_logo_url ? [form.hero_logo_url] : []}
-            />
-          </div>
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium mb-2">Imagem do Hero</label>
+          <label className="block text-sm font-medium mb-2">Imagem do Hero (Logo/Foto)</label>
+          <p className="text-xs text-muted-foreground mb-3">
+            Imagem que aparecerá no lado esquerdo do hero. Pode ser logo ou foto.
+          </p>
           <div className="space-y-2">
             {form.hero_image_url && (
               <div className="flex items-center gap-2">
