@@ -31,24 +31,24 @@ const Header = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 border-b bg-black backdrop-blur-lg">
+    <header className="sticky top-0 z-50 border-b backdrop-blur-lg" style={{ backgroundColor: '#3B6FD8' }}>
       <div className="container mx-auto flex h-24 items-center justify-between px-4">
-        <Link to="/" className="flex items-center gap-2">
-          <img src="https://cdn.builder.io/api/v1/image/assets%2F2ab7f0f046f142c08bab1f7e136ba5b7%2F954eec5b35ac443eb63ae8a7ca82cabf?format=webp&width=800&height=1200" alt="Master Cell Logo" className="h-20 w-auto" />
+        <Link to="/" className="flex items-center gap-2 font-bold text-xl text-white">
+          Master Cell
         </Link>
 
         {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-6">
-          <Button asChild size="sm" className="border border-yellow-400 bg-transparent text-yellow-400 hover:bg-yellow-400/10">
+          <Button asChild size="sm" className="border border-white bg-transparent text-white hover:bg-white/10">
             <Link to="/">Início</Link>
           </Button>
 
-          <Button asChild size="sm" className="border border-yellow-400 bg-transparent text-yellow-400 hover:bg-yellow-400/10">
+          <Button asChild size="sm" className="border border-white bg-transparent text-white hover:bg-white/10">
             <Link to="/produtos">Produtos</Link>
           </Button>
 
           {user && isAdmin && (
-            <Button asChild size="sm" className="border border-yellow-400 bg-transparent text-yellow-400 hover:bg-yellow-400/10">
+            <Button asChild size="sm" className="border border-white bg-transparent text-white hover:bg-white/10">
               <Link to="/admin">Painel</Link>
             </Button>
           )}
@@ -71,13 +71,13 @@ const Header = () => {
             <Button
               size="sm"
               onClick={handleLogout}
-              className="border border-yellow-400 bg-transparent text-yellow-400 hover:bg-yellow-400/10 flex items-center gap-2"
+              className="border border-white bg-transparent text-white hover:bg-white/10 flex items-center gap-2"
             >
               <LogOut className="h-4 w-4" />
               <span className="hidden sm:inline text-xs">Sair</span>
             </Button>
           ) : (
-            <Button asChild size="sm" className="border border-yellow-400 bg-transparent text-yellow-400 hover:bg-yellow-400/10">
+            <Button asChild size="sm" className="border border-white bg-transparent text-white hover:bg-white/10">
               <Link to="/admin/login">Entrar</Link>
             </Button>
           )}
@@ -90,30 +90,30 @@ const Header = () => {
           aria-label="Menu"
         >
           {open ? (
-            <X className="h-6 w-6 text-yellow-400" />
+            <X className="h-6 w-6 text-white" />
           ) : (
-            <Menu className="h-6 w-6 text-yellow-400" />
+            <Menu className="h-6 w-6 text-white" />
           )}
         </button>
       </div>
 
       {/* Mobile nav */}
       {open && (
-        <nav className="md:hidden border-t bg-black px-4 pb-4 pt-2 space-y-2">
-          <Button asChild size="sm" className="w-full border border-yellow-400 bg-transparent text-yellow-400 hover:bg-yellow-400/10">
+        <nav className="md:hidden border-t px-4 pb-4 pt-2 space-y-2" style={{ backgroundColor: '#3B6FD8' }}>
+          <Button asChild size="sm" className="w-full border border-white bg-transparent text-white hover:bg-white/10">
             <Link to="/" onClick={() => setOpen(false)}>
               Início
             </Link>
           </Button>
 
-          <Button asChild size="sm" className="w-full border border-yellow-400 bg-transparent text-yellow-400 hover:bg-yellow-400/10">
+          <Button asChild size="sm" className="w-full border border-white bg-transparent text-white hover:bg-white/10">
             <Link to="/produtos" onClick={() => setOpen(false)}>
               Produtos
             </Link>
           </Button>
 
           {user && isAdmin && (
-            <Button asChild size="sm" className="w-full border border-yellow-400 bg-transparent text-yellow-400 hover:bg-yellow-400/10">
+            <Button asChild size="sm" className="w-full border border-white bg-transparent text-white hover:bg-white/10">
               <Link to="/admin" onClick={() => setOpen(false)}>
                 Painel Admin
               </Link>
@@ -138,13 +138,13 @@ const Header = () => {
             <Button
               onClick={handleLogout}
               size="sm"
-              className="w-full border border-yellow-400 bg-transparent text-yellow-400 hover:bg-yellow-400/10 flex items-center gap-2"
+              className="w-full border border-white bg-transparent text-white hover:bg-white/10 flex items-center gap-2"
             >
               <LogOut className="h-4 w-4" />
               Sair
             </Button>
           ) : (
-            <Button asChild size="sm" className="w-full border border-yellow-400 bg-transparent text-yellow-400 hover:bg-yellow-400/10">
+            <Button asChild size="sm" className="w-full border border-white bg-transparent text-white hover:bg-white/10">
               <Link to="/admin/login" onClick={() => setOpen(false)}>
                 Entrar
               </Link>
