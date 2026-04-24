@@ -69,7 +69,7 @@ const Header = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 backdrop-blur-lg" style={{ backgroundColor: '#000000', borderBottom: '2px solid #FFF9E6' }}>
+    <header className="sticky top-0 z-50 backdrop-blur-lg" style={{ backgroundColor: '#000000', borderBottom: '2px solid #fcd34d' }}>
       <div className="container mx-auto flex h-24 items-center justify-between px-4 gap-4">
         <Link to="/" className="flex items-center gap-2 flex-shrink-0">
           <img
@@ -110,22 +110,6 @@ const Header = () => {
               <Link to={item.href}>{item.label}</Link>
             </Button>
           ))}
-
-          {/* Brand filters - desktop */}
-          <div className="hidden lg:flex items-center gap-1">
-            <span className="text-xs text-white/60 px-2">|</span>
-            {["Apple", "Samsung", "Xiaomi"].map((brand) => (
-              <Button
-                key={brand}
-                asChild
-                size="sm"
-                variant="ghost"
-                className="text-xs text-yellow-300 hover:text-yellow-200 h-auto py-1 px-2"
-              >
-                <Link to={`/produtos?brand=${brand}`}>{brand}</Link>
-              </Button>
-            ))}
-          </div>
 
           {user && isAdmin && (
             <Button asChild size="sm" className="border border-yellow-300 bg-transparent text-yellow-300 hover:bg-yellow-300/10">
@@ -193,24 +177,6 @@ const Header = () => {
               </Link>
             </Button>
           ))}
-
-          {/* Brand filters - mobile */}
-          <div className="border-t border-yellow-300/30 pt-2 mt-2 space-y-1">
-            <p className="text-xs text-white/60 px-2 font-medium">Marcas populares</p>
-            {["Apple", "Samsung", "Xiaomi", "LG", "Motorola"].map((brand) => (
-              <Button
-                key={brand}
-                asChild
-                size="sm"
-                variant="ghost"
-                className="w-full text-left justify-start text-xs text-yellow-300 hover:text-yellow-200 h-auto py-1"
-              >
-                <Link to={`/produtos?brand=${brand}`} onClick={() => setOpen(false)}>
-                  {brand}
-                </Link>
-              </Button>
-            ))}
-          </div>
 
           {user && isAdmin && (
             <Button asChild size="sm" className="w-full border border-yellow-300 bg-transparent text-yellow-300 hover:bg-yellow-300/10">
