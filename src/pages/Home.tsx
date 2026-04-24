@@ -73,7 +73,7 @@ const Home = () => {
   return (
     <div>
       {/* Hero */}
-      <section className="relative overflow-hidden text-white" style={{ backgroundColor: '#003ED2' }}>
+      <section className="relative overflow-hidden text-white" style={{ backgroundColor: '#0641D3' }}>
         <div
           className="absolute inset-0 opacity-5"
           style={{
