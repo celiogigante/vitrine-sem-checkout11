@@ -103,17 +103,11 @@ const Home = () => {
           <div className="grid grid-cols-1 md:grid-cols-5 gap-8 h-full items-center">
             {/* Left side - Logo/Image (30%) */}
             <div className="flex items-center justify-center py-12 md:py-0 md:col-span-1">
-              {heroConfig?.hero_logo_url || heroConfig?.hero_image_url ? (
-                <img
-                  src={heroConfig.hero_logo_url || heroConfig.hero_image_url}
-                  alt={heroConfig.hero_name}
-                  className="h-auto w-full max-w-xs rounded-lg shadow-xl"
-                />
-              ) : (
-                <div className="w-full max-w-xs h-64 bg-gray-800 rounded flex items-center justify-center">
-                  <span className="text-gray-600">Imagem não configurada</span>
-                </div>
-              )}
+              <img
+                src={heroConfig?.hero_logo_url || heroConfig?.hero_image_url || "https://uuwpzxpsvltqhrtadirk.supabase.co/storage/v1/object/public/products/webp%20logo.webp"}
+                alt={heroConfig?.hero_name || "Logo"}
+                className="h-auto w-full max-w-xs rounded-lg shadow-xl"
+              />
             </div>
 
             {/* Right side - Carousel (70%) */}
