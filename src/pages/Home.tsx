@@ -100,9 +100,9 @@ const Home = () => {
       {/* Hero */}
       <section className="relative overflow-hidden text-white bg-black" style={{ minHeight: "480px" }}>
         <div className="container mx-auto px-4 py-0 relative h-full">
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-8 h-full items-center">
+          <div className="grid grid-cols-1 md:grid-cols-10 gap-8 h-full items-center">
             {/* Left side - Logo/Image (30%) */}
-            <div className="flex items-center justify-center py-12 md:py-0 md:col-span-1">
+            <div className="flex items-center justify-center py-12 md:py-0 md:col-span-3">
               <img
                 src={heroConfig?.hero_logo_url || heroConfig?.hero_image_url || "https://uuwpzxpsvltqhrtadirk.supabase.co/storage/v1/object/public/products/webp%20logo.webp"}
                 alt={heroConfig?.hero_name || "Logo"}
@@ -111,7 +111,7 @@ const Home = () => {
             </div>
 
             {/* Right side - Carousel (70%) */}
-            <div className="flex flex-col items-center justify-center py-12 md:py-0 md:col-span-4">
+            <div className="flex flex-col items-center justify-center py-12 md:py-0 md:col-span-7">
               <div className="w-full mb-6">
                 <h2 className="text-2xl font-bold text-center md:text-left">
                   {heroConfig?.carousel_title || "Destaques"}
