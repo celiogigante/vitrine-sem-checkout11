@@ -81,7 +81,7 @@ const Home = () => {
               "radial-gradient(circle at 20% 50%, #ffffff 0%, transparent 50%)"
           }}
         />
-        <div className="container mx-auto px-4 py-20 md:py-28 relative min-h-[500px] md:min-h-[600px]">
+        <div className="container mx-auto px-4 py-4 relative">
           <img
             src="https://cdn.builder.io/api/v1/image/assets%2F745a6a1096d546999a2f21f0471c7da5%2F8414122a15f7441ca0b39a94efae5912?format=webp&width=800&height=1200"
             alt="Master Cell Logo"
