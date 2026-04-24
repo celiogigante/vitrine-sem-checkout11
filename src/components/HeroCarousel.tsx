@@ -116,7 +116,7 @@ export default function HeroCarousel() {
         {products.map((product, index) => (
           <Link
             key={product.id}
-            to={`/produtos/${product.id}`}
+            to={`/produto/${product.id}`}
             className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
               index === currentIndex ? "opacity-100" : "opacity-0"
             }`}
