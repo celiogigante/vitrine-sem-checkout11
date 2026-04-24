@@ -134,7 +134,7 @@ const Home = () => {
             <div className="flex flex-col items-center justify-center py-0 md:col-span-7">
               <div className="w-full mb-6">
                 <h2 className="text-2xl font-bold text-center md:text-left">
-                  {heroConfig?.carousel_title || "Destaques"}
+                  {heroConfig?.carousel_title || "Promoções"}
                 </h2>
               </div>
               <div className="w-full h-96 md:h-[461px] bg-white rounded-lg overflow-hidden shadow-2xl">
@@ -142,35 +142,6 @@ const Home = () => {
               </div>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Brand filter */}
-      <section className="container mx-auto px-4 pt-12">
-        <div className="flex flex-wrap gap-2 justify-center">
-          <button
-            onClick={() => setBrandFilter("all")}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-              brandFilter === "all"
-                ? "bg-primary text-primary-foreground"
-                : "bg-secondary hover:text-primary"
-            }`}
-          >
-            Todas
-          </button>
-          {brands.map((b) => (
-            <button
-              key={b}
-              onClick={() => setBrandFilter(b)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                brandFilter === b
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-secondary hover:text-primary"
-              }`}
-            >
-              {b}
-            </button>
-          ))}
         </div>
       </section>
 
@@ -215,11 +186,12 @@ const Home = () => {
         </h2>
         <p className="text-white">{s.whatsappSectionText}</p>
 
-        <Button asChild size="lg">
-          <a href={`https://wa.me/${s.whatsappNumber}`}>
-            <MessageCircle className="mr-2" />
-            {s.whatsappSectionCta}
-          </a>
+        <Button
+          size="lg"
+          onClick={() => window.open(`https://wa.me/${s.whatsappNumber}`, "_blank")}
+        >
+          <MessageCircle className="mr-2" />
+          {s.whatsappSectionCta}
         </Button>
       </section>
     </div>
