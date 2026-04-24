@@ -171,7 +171,7 @@ export interface SiteSettings {
 const SETTINGS_KEY = "cellstore_settings";
 
 const defaultSettings: SiteSettings = {
-  whatsappNumber: "5511999999999",
+  whatsappNumber: "5566992473929",
   heroTitle: "Celulares seminovos com garantia e qualidade",
   heroSubtitle: "Aparelhos testados, revisados e prontos para uso. Economize até 50% comprando seminovos com segurança.",
   heroImage: "",
@@ -193,17 +193,23 @@ const defaultSettings: SiteSettings = {
   footerName: "Master Cell",
   footerDesc: "Celulares seminovos testados e com garantia. Qualidade e confiança para você.",
   footerEmail: "contato@mastercell.com.br",
-  footerPhone: "(11) 99999-9999",
-  footerInstagram: "@mastercell",
+  footerPhone: "(66) 99247-3929",
+  footerInstagram: "@mastercellbg",
 };
 
 export function getSettings(): SiteSettings {
   const stored = localStorage.getItem(SETTINGS_KEY);
-  if (!stored) {
-    localStorage.setItem(SETTINGS_KEY, JSON.stringify(defaultSettings));
-    return defaultSettings;
-  }
-  return { ...defaultSettings, ...JSON.parse(stored) };
+  const settings = stored ? { ...defaultSettings, ...JSON.parse(stored) } : defaultSettings;
+
+  // Ensure critical contact info is always up to date
+  const updatedSettings = {
+    ...settings,
+    whatsappNumber: defaultSettings.whatsappNumber,
+    footerPhone: defaultSettings.footerPhone,
+    footerInstagram: defaultSettings.footerInstagram,
+  };
+
+  return updatedSettings;
 }
 
 export function saveSettings(s: SiteSettings) {
