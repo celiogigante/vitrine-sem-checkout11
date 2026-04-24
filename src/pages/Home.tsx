@@ -134,7 +134,7 @@ const Home = () => {
             <div className="flex flex-col items-center justify-center py-0 md:col-span-7">
               <div className="w-full mb-6">
                 <h2 className="text-2xl font-bold text-center md:text-left">
-                  {heroConfig?.carousel_title || "Destaques"}
+                  {heroConfig?.carousel_title || "Promoções"}
                 </h2>
               </div>
               <div className="w-full h-96 md:h-[461px] bg-white rounded-lg overflow-hidden shadow-2xl">
