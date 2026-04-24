@@ -33,8 +33,7 @@ const Header = () => {
   return (
     <header className="sticky top-0 z-50 border-b backdrop-blur-lg" style={{ backgroundColor: '#3B6FD8' }}>
       <div className="container mx-auto flex h-24 items-center justify-between px-4">
-        <Link to="/" className="flex items-center gap-2 font-bold text-xl text-white">
-          Master Cell
+        <Link to="/" className="flex items-center gap-2">
         </Link>
 
         {/* Desktop nav */}
