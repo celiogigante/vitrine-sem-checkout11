@@ -199,11 +199,17 @@ const defaultSettings: SiteSettings = {
 
 export function getSettings(): SiteSettings {
   const stored = localStorage.getItem(SETTINGS_KEY);
-  if (!stored) {
-    localStorage.setItem(SETTINGS_KEY, JSON.stringify(defaultSettings));
-    return defaultSettings;
-  }
-  return { ...defaultSettings, ...JSON.parse(stored) };
+  const settings = stored ? { ...defaultSettings, ...JSON.parse(stored) } : defaultSettings;
+
+  // Ensure critical contact info is always up to date
+  const updatedSettings = {
+    ...settings,
+    whatsappNumber: defaultSettings.whatsappNumber,
+    footerPhone: defaultSettings.footerPhone,
+    footerInstagram: defaultSettings.footerInstagram,
+  };
+
+  return updatedSettings;
 }
 
 export function saveSettings(s: SiteSettings) {
