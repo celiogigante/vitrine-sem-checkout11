@@ -75,7 +75,7 @@ const Home = () => {
       {/* Hero */}
       <section className="relative overflow-hidden bg-primary text-primary-foreground">
         <div
-          className="absolute inset-0 opacity-10"
+          className="absolute inset-0 opacity-5"
           style={{
             backgroundImage:
               "radial-gradient(circle at 20% 50%, hsl(var(--accent)) 0%, transparent 50%)"
@@ -97,7 +97,7 @@ const Home = () => {
                 </Link>
               </Button>
 
-              <Button asChild size="lg" className="bg-yellow-400 text-black hover:bg-yellow-300">
+              <Button asChild size="lg" className="border-2 border-yellow-400 bg-transparent text-yellow-300 hover:bg-yellow-400/10">
                 <a
                   href={`https://wa.me/${s.whatsappNumber}`}
                   target="_blank"
@@ -121,11 +121,11 @@ const Home = () => {
       {/* Brand filter */}
       <section className="container mx-auto px-4 pt-12">
         <div className="flex flex-wrap gap-2 justify-center">
-          <button onClick={() => setBrandFilter("all")} className="px-4 py-2 rounded-full border border-gray-300 bg-white hover:bg-gray-100 text-sm font-medium transition-colors">
+          <button onClick={() => setBrandFilter("all")} className="px-4 py-2 rounded-full text-sm font-medium transition-colors hover:text-primary">
             Todas
           </button>
           {BRANDS.map((b) => (
-            <button key={b} onClick={() => setBrandFilter(b)} className="px-4 py-2 rounded-full border border-gray-300 bg-white hover:bg-gray-100 text-sm font-medium transition-colors">
+            <button key={b} onClick={() => setBrandFilter(b)} className="px-4 py-2 rounded-full text-sm font-medium transition-colors hover:text-primary">
               {b}
             </button>
           ))}

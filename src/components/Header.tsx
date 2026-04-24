@@ -84,16 +84,15 @@ const Header = () => {
 
           {user ? (
             <Button
-              variant="outline"
               size="sm"
               onClick={handleLogout}
-              className="flex items-center gap-2"
+              className="border border-yellow-400 bg-transparent text-yellow-400 hover:bg-yellow-400/10 flex items-center gap-2"
             >
               <LogOut className="h-4 w-4" />
               <span className="hidden sm:inline text-xs">Sair</span>
             </Button>
           ) : (
-            <Button asChild size="sm" variant="default">
+            <Button asChild size="sm" className="border border-yellow-400 bg-transparent text-yellow-400 hover:bg-yellow-400/10">
               <Link to="/admin/login">Entrar</Link>
             </Button>
           )}
@@ -159,15 +158,14 @@ const Header = () => {
           {user ? (
             <Button
               onClick={handleLogout}
-              variant="outline"
               size="sm"
-              className="w-full flex items-center gap-2"
+              className="w-full border border-yellow-400 bg-transparent text-yellow-400 hover:bg-yellow-400/10 flex items-center gap-2"
             >
               <LogOut className="h-4 w-4" />
               Sair
             </Button>
           ) : (
-            <Button asChild size="sm" className="w-full" variant="default">
+            <Button asChild size="sm" className="w-full border border-yellow-400 bg-transparent text-yellow-400 hover:bg-yellow-400/10">
               <Link to="/admin/login" onClick={() => setOpen(false)}>
                 Entrar
               </Link>
