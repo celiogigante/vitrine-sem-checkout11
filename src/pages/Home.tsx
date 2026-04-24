@@ -73,48 +73,20 @@ const Home = () => {
   return (
     <div>
       {/* Hero */}
-      <section className="relative overflow-hidden bg-primary text-primary-foreground">
+      <section className="relative overflow-hidden text-white" style={{ backgroundColor: '#003ED4' }}>
         <div
           className="absolute inset-0 opacity-5"
           style={{
             backgroundImage:
-              "radial-gradient(circle at 20% 50%, hsl(var(--accent)) 0%, transparent 50%)"
+              "radial-gradient(circle at 20% 50%, #ffffff 0%, transparent 50%)"
           }}
         />
-        <div className="container mx-auto px-4 py-20 md:py-28 relative grid md:grid-cols-2 gap-10 items-center">
-          <div className="space-y-6">
-            <h1 className="text-4xl md:text-5xl font-extrabold text-yellow-300">
-              {s.heroTitle}
-            </h1>
-            <p className="text-lg opacity-80 max-w-lg text-yellow-100">
-              {s.heroSubtitle}
-            </p>
-
-            <div className="flex flex-wrap gap-3">
-              <Button asChild size="lg" className="border-2 border-yellow-400 bg-transparent text-yellow-300 hover:bg-yellow-400/10">
-                <Link to="/produtos">
-                  Ver catálogo <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
-
-              <Button asChild size="lg" className="bg-white text-primary hover:bg-white/90">
-                <a
-                  href={`https://wa.me/${s.whatsappNumber}`}
-                  target="_blank"
-                >
-                  <MessageCircle className="mr-2 h-4 w-4" />
-                  {s.heroCtaText}
-                </a>
-              </Button>
-            </div>
-          </div>
-
-          {s.heroImage && (
-            <img
-              src={s.heroImage}
-              className="hidden md:block rounded-2xl"
-            />
-          )}
+        <div className="container mx-auto px-4 py-20 md:py-28 relative min-h-[500px] md:min-h-[600px]">
+          <img
+            src="https://cdn.builder.io/api/v1/image/assets%2F2ab7f0f046f142c08bab1f7e136ba5b7%2Fb5a4badc70a247b38acb6adc839e22f4?format=webp&width=800&height=1200"
+            alt="Master Cell Logo"
+            className="h-auto w-full max-w-xs md:max-w-sm"
+          />
         </div>
       </section>
 
