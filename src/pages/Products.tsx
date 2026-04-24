@@ -6,11 +6,11 @@ import ProductCard from "@/components/ProductCard";
 import { conditionLabel } from "@/lib/productHelpers";
 import { supabase, type Product } from "@/lib/supabase";
 
-const BRANDS = ["Apple", "Samsung", "Motorola", "Xiaomi", "Google", "OnePlus"];
 const CONDITIONS = ["novo", "seminovo", "excelente", "bom", "regular"] as const;
 
 const Products = () => {
   const [products, setProducts] = useState<Product[]>([]);
+  const [brands, setBrands] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [brand, setBrand] = useState("all");
@@ -29,7 +29,14 @@ const Products = () => {
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      setProducts((data || []) as Product[]);
+      const productList = (data || []) as Product[];
+      setProducts(productList);
+
+      // Extract unique brands from products
+      const uniqueBrands = Array.from(new Set(productList.map(p => p.brand)))
+        .filter(Boolean)
+        .sort();
+      setBrands(uniqueBrands);
     } catch (err) {
       console.error("Erro ao carregar produtos:", err);
     } finally {
@@ -69,7 +76,7 @@ const Products = () => {
           <SelectTrigger className="w-full md:w-40"><SelectValue placeholder="Marca" /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Todas as marcas</SelectItem>
-            {BRANDS.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
+            {brands.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
           </SelectContent>
         </Select>
         <Select value={condition} onValueChange={setCondition}>

@@ -17,7 +17,6 @@ import { Pencil, Trash2, Plus, LogOut, Loader2, BarChart3, Package, Menu, Image,
 import { useToast } from "@/hooks/use-toast";
 
 const CONDITIONS = ["novo", "seminovo", "excelente", "bom", "regular"];
-const BRANDS = ["Apple", "Samsung", "Motorola", "Xiaomi", "Google", "OnePlus"];
 
 const conditionLabel = (c: string) => {
   const map: Record<string, string> = {
@@ -36,6 +35,7 @@ export default function AdminDashboard() {
   const { toast } = useToast();
 
   const [products, setProducts] = useState<Product[]>([]);
+  const [brands, setBrands] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState<string | null>(null);
@@ -68,7 +68,14 @@ export default function AdminDashboard() {
 
       if (error) throw error;
 
-      setProducts((data || []) as Product[]);
+      const productList = (data || []) as Product[];
+      setProducts(productList);
+
+      // Extract unique brands from products
+      const uniqueBrands = Array.from(new Set(productList.map(p => p.brand)))
+        .filter(Boolean)
+        .sort();
+      setBrands(uniqueBrands);
     } catch (err) {
       console.error("Error loading products:", err);
       toast({
@@ -332,18 +339,26 @@ export default function AdminDashboard() {
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
             />
-            <Select value={form.brand} onValueChange={(v) => setForm({ ...form, brand: v })}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {BRANDS.map((b) => (
-                  <SelectItem key={b} value={b}>
-                    {b}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <div className="flex gap-2">
+              <Select value={form.brand} onValueChange={(v) => setForm({ ...form, brand: v })}>
+                <SelectTrigger className="flex-1">
+                  <SelectValue placeholder="Selecione marca" />
+                </SelectTrigger>
+                <SelectContent>
+                  {brands.map((b) => (
+                    <SelectItem key={b} value={b}>
+                      {b}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Input
+                placeholder="Ou nova marca"
+                value={form.brand}
+                onChange={(e) => setForm({ ...form, brand: e.target.value })}
+                className="flex-1"
+              />
+            </div>
             <Input
               type="number"
               placeholder="Preço"

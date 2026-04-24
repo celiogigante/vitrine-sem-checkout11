@@ -59,7 +59,7 @@ const Header = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 border-b backdrop-blur-lg" style={{ backgroundColor: '#000000' }}>
+    <header className="sticky top-0 z-50 backdrop-blur-lg" style={{ backgroundColor: '#000000', borderBottom: '2px solid #FFF9E6' }}>
       <div className="container mx-auto flex h-24 items-center justify-between px-4">
         <Link to="/" className="flex items-center gap-2">
           <img
@@ -116,7 +116,7 @@ const Header = () => {
 
       {/* Mobile nav */}
       {open && (
-        <nav className="md:hidden border-t px-4 pb-4 pt-2 space-y-2" style={{ backgroundColor: '#000000' }}>
+        <nav className="md:hidden border-t px-4 pb-4 pt-2 space-y-2" style={{ backgroundColor: '#000000', borderTopColor: '#FFF9E6' }}>
           {menuItems.map((item) => (
             <Button
               key={item.id}
