@@ -16,7 +16,7 @@ import ProductCard from "@/components/ProductCard";
 import HeroCarousel from "@/components/HeroCarousel";
 import { useEffect, useMemo, useState } from "react";
 import { supabase, type Product } from "@/lib/supabase";
-import { getSettings, BRANDS } from "@/lib/products";
+import { getSettings } from "@/lib/products";
 
 const ICONS: Record<string, any> = {
   Shield,
@@ -39,6 +39,7 @@ const Home = () => {
   const [s, setS] = useState(getSettings());
   const [brandFilter, setBrandFilter] = useState<string>("all");
   const [products, setProducts] = useState<Product[]>([]);
+  const [brands, setBrands] = useState<string[]>([]);
   const [heroConfig, setHeroConfig] = useState<HeroConfig | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -63,7 +64,14 @@ const Home = () => {
         .order("created_at", { ascending: false });
 
       if (productsError) throw productsError;
-      setProducts((productsData || []) as Product[]);
+      const productList = (productsData || []) as Product[];
+      setProducts(productList);
+
+      // Extract unique brands from products
+      const uniqueBrands = Array.from(new Set(productList.map(p => p.brand)))
+        .filter(Boolean)
+        .sort();
+      setBrands(uniqueBrands);
 
       // Load hero config
       const { data: configData, error: configError } = await supabase
@@ -128,11 +136,26 @@ const Home = () => {
       {/* Brand filter */}
       <section className="container mx-auto px-4 pt-12">
         <div className="flex flex-wrap gap-2 justify-center">
-          <button onClick={() => setBrandFilter("all")} className="px-4 py-2 rounded-full text-sm font-medium transition-colors hover:text-primary">
+          <button
+            onClick={() => setBrandFilter("all")}
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+              brandFilter === "all"
+                ? "bg-primary text-primary-foreground"
+                : "bg-secondary hover:text-primary"
+            }`}
+          >
             Todas
           </button>
-          {BRANDS.map((b) => (
-            <button key={b} onClick={() => setBrandFilter(b)} className="px-4 py-2 rounded-full text-sm font-medium transition-colors hover:text-primary">
+          {brands.map((b) => (
+            <button
+              key={b}
+              onClick={() => setBrandFilter(b)}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                brandFilter === b
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-secondary hover:text-primary"
+              }`}
+            >
               {b}
             </button>
           ))}

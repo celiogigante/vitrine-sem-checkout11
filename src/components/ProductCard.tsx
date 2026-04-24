@@ -10,9 +10,18 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { MessageCircle, Eye } from "lucide-react";
+import { recordProductClick } from "@/hooks/useProductClick";
 
 const ProductCard = ({ product }: { product: Product }) => {
   const sold = product.status === "vendido";
+
+  const handleViewDetailsClick = () => {
+    recordProductClick(product.id, { type: "product_card" });
+  };
+
+  const handleWhatsAppClick = () => {
+    recordProductClick(product.id, { type: "whatsapp" });
+  };
 
   return (
     <div
@@ -81,24 +90,20 @@ const ProductCard = ({ product }: { product: Product }) => {
         </div>
 
         <div className="flex gap-2 mt-3">
-          <Button asChild size="sm" variant="outline" className="flex-1 h-9">
+          <Button asChild size="sm" variant="outline" className="flex-1 h-9" onClick={handleViewDetailsClick}>
             <Link to={`/produto/${product.id}`}>Ver detalhes</Link>
           </Button>
 
           {!sold && (
             <Button
-              asChild
               size="sm"
               className="bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground h-9 w-9"
+              onClick={() => {
+                handleWhatsAppClick();
+                window.open(getWhatsAppLink(product), "_blank");
+              }}
             >
-              <a
-                href={getWhatsAppLink(product)}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Negociar via WhatsApp"
-              >
-                <MessageCircle className="h-4 w-4" />
-              </a>
+              <MessageCircle className="h-4 w-4" />
             </Button>
           )}
         </div>

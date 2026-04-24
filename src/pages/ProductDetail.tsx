@@ -5,12 +5,19 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { conditionLabel, conditionColor, getWhatsAppLink, statusLabel, statusColor, type Product } from "@/lib/products";
 import { supabase } from "@/lib/supabase";
+import { recordProductClick, recordProductView } from "@/hooks/useProductClick";
 
 const ProductDetail = () => {
   const { id } = useParams();
   const [product, setProduct] = useState<Product | undefined>();
   const [selectedImage, setSelectedImage] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+
+  const handleWhatsAppClick = () => {
+    if (product) {
+      recordProductClick(product.id, { type: "whatsapp" });
+    }
+  };
 
   useEffect(() => {
     if (id) {
@@ -58,6 +65,9 @@ const ProductDetail = () => {
           .from("products")
           .update({ views: (data.views || 0) + 1 })
           .eq("id", productId);
+
+        // Record product view
+        recordProductView(productId);
       }
     } catch (err) {
       console.error("Error loading product:", err);
@@ -147,10 +157,15 @@ const ProductDetail = () => {
 
           {!sold ? (
             <>
-              <Button asChild size="lg" className="w-full bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground text-base py-6">
-                <a href={getWhatsAppLink(product)} target="_blank" rel="noopener noreferrer">
-                  <MessageCircle className="mr-2 h-5 w-5" /> Negociar pelo WhatsApp
-                </a>
+              <Button
+                size="lg"
+                className="w-full bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground text-base py-6"
+                onClick={() => {
+                  handleWhatsAppClick();
+                  window.open(getWhatsAppLink(product), "_blank");
+                }}
+              >
+                <MessageCircle className="mr-2 h-5 w-5" /> Negociar pelo WhatsApp
               </Button>
               {(product as any).is_on_request && (
                 <div className="rounded-lg border border-orange-200 bg-orange-50 p-4">
