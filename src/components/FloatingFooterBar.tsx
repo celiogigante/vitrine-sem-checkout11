@@ -76,19 +76,12 @@ const FloatingFooterBar = () => {
         >
           <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/0 to-emerald-500/0 group-hover:from-emerald-500/30 group-hover:to-emerald-500/0 transition-all duration-300"></div>
           <div className="flex flex-col items-center gap-2 relative z-10">
-            {/* Official WhatsApp Logo Bubble */}
-            <svg
-              viewBox="0 0 100 100"
-              fill="currentColor"
-              className="h-8 w-8 text-white transition-all duration-300 group-hover:scale-125"
-            >
-              {/* Bubble background */}
-              <circle cx="50" cy="50" r="48" fill="#25D366" />
-              {/* Phone icon inside */}
-              <g fill="white" transform="translate(50, 50) scale(0.45)">
-                <path d="M-8,-20 L8,-20 C10.2,-20 12,-18.2 12,-16 L12,16 C12,18.2 10.2,20 8,20 L-8,20 C-10.2,20 -12,18.2 -12,16 L-12,-16 C-12,-18.2 -10.2,-20 -8,-20 M-8,-18 L-8,18 L8,18 L8,-18 L-8,-18" />
-              </g>
-            </svg>
+            {/* Official WhatsApp Logo Image */}
+            <img
+              src="https://cdn.builder.io/api/v1/image/assets%2F3a4b716306f84cbea69438c199a4f5ae%2Fa560d2af2ff543d3ae83ddf136da6ca2?format=webp&width=800&height=1200"
+              alt="WhatsApp"
+              className="h-8 w-8 rounded-full transition-all duration-300 group-hover:scale-125 shadow-md"
+            />
             <span className="text-xs font-semibold text-white opacity-70 group-hover:opacity-100 transition-opacity duration-300">
               WhatsApp
             </span>
