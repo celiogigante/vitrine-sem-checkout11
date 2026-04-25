@@ -89,7 +89,7 @@ const ProductCard = ({ product }: { product: Product }) => {
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-2 mt-4">
+        <div className="flex flex-row gap-2 mt-4">
           <Button asChild size="sm" variant="outline" className="flex-1 h-9" onClick={handleViewDetailsClick}>
             <Link to={`/produto/${product.id}`}>Ver detalhes</Link>
           </Button>
