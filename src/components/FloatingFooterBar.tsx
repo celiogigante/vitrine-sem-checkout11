@@ -23,7 +23,7 @@ const FloatingFooterBar = () => {
       className="fixed bottom-0 left-0 right-0 z-40 border-t"
       style={{
         backgroundColor: "#000",
-        borderColor: "#FFF9E6",
+        borderColor: "#FCD34D",
         backdropFilter: "blur(8px)",
       }}
     >
@@ -33,7 +33,7 @@ const FloatingFooterBar = () => {
           onClick={scrollToTop}
           className="flex items-center justify-center transition-all duration-300 group relative overflow-hidden"
           style={{
-            borderRight: "1px solid #FFF9E6",
+            borderRight: "1px solid #FCD34D",
           }}
           aria-label="Scroll to top"
         >
@@ -53,7 +53,7 @@ const FloatingFooterBar = () => {
           rel="noreferrer"
           className="flex items-center justify-center transition-all duration-300 group relative overflow-hidden"
           style={{
-            borderRight: "1px solid #FFF9E6",
+            borderRight: "1px solid #FCD34D",
           }}
           aria-label="Localização no Google Maps"
         >
