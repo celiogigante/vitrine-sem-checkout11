@@ -18,7 +18,7 @@ const Products = () => {
   const [brand, setBrand] = useState(searchParams.get("brand") || "all");
   const [condition, setCondition] = useState("all");
   const [sort, setSort] = useState("recent");
-  const [mobileColumns, setMobileColumns] = useState<1 | 2>(2);
+  const [mobileColumns, setMobileColumns] = useState<1 | 2>(1);
 
   useEffect(() => {
     loadProducts();

@@ -42,7 +42,7 @@ const Home = () => {
   const [brands, setBrands] = useState<string[]>([]);
   const [heroConfig, setHeroConfig] = useState<HeroConfig | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [mobileColumns, setMobileColumns] = useState<1 | 2>(2);
+  const [mobileColumns, setMobileColumns] = useState<1 | 2>(1);
 
   useEffect(() => {
     const h = () => setS(getSettings());
