@@ -8,13 +8,12 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { ImageUpload } from "@/components/ImageUpload";
 import { Insights } from "@/components/Insights";
 import AdminMenuManager from "@/components/AdminMenuManager";
 import AdminHeroConfig from "@/components/AdminHeroConfig";
 import AdminProductHighlights from "@/components/AdminProductHighlights";
 import AdminBrandsManager from "@/components/AdminBrandsManager";
-import { Pencil, Trash2, Plus, LogOut, Loader2, BarChart3, Package, Menu, Image, Star, Tag } from "lucide-react";
+import { Pencil, Trash2, Plus, LogOut, Loader2, BarChart3, Package, Menu, Image, Star, Tag, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 const CONDITIONS = ["novo", "seminovo", "excelente", "bom", "regular"];
@@ -53,13 +52,24 @@ export default function AdminDashboard() {
     status: "disponivel",
     battery_percentage: undefined as number | undefined,
     general_condition: "",
-    images: [] as string[],
+    slug: "",
+    images: [""] as string[],
     video_url: "",
     specs: {} as Record<string, string>,
     featured: false,
     promotion: false,
     is_on_request: false,
   });
+
+  const updateImage = (i: number, v: string) => {
+    const imgs = [...form.images];
+    imgs[i] = v;
+    setForm({ ...form, images: imgs });
+  };
+
+  const addImage = () => setForm({ ...form, images: [...form.images, ""] });
+
+  const removeImage = (i: number) => setForm({ ...form, images: form.images.filter((_, j) => j !== i) });
 
   useEffect(() => {
     loadProducts();
@@ -125,6 +135,7 @@ export default function AdminDashboard() {
         status: form.status,
         battery_percentage: form.battery_percentage || null,
         general_condition: form.general_condition || null,
+        slug: form.slug || form.name.toLowerCase().replace(/\s+/g, "-"),
         images: form.images.filter((i) => i.trim()),
         video_url: form.video_url || null,
         specs: form.specs,
@@ -172,7 +183,8 @@ export default function AdminDashboard() {
       status: (product as any).status || "disponivel",
       battery_percentage: (product as any).battery_percentage,
       general_condition: (product as any).general_condition || "",
-      images: product.images && product.images.length ? product.images : [],
+      slug: (product as any).slug || "",
+      images: product.images && product.images.length ? product.images : [""],
       video_url: product.video_url || "",
       specs: product.specs,
       featured: product.featured,
@@ -213,7 +225,8 @@ export default function AdminDashboard() {
       status: "disponivel",
       battery_percentage: undefined,
       general_condition: "",
-      images: [],
+      slug: "",
+      images: [""],
       video_url: "",
       specs: {},
       featured: false,
@@ -458,19 +471,55 @@ export default function AdminDashboard() {
               value={form.general_condition}
               onChange={(e) => setForm({ ...form, general_condition: e.target.value })}
             />
-            <div className="md:col-span-2">
-              <ImageUpload
-                onImagesUrls={(urls) => setForm({ ...form, images: urls })}
-                onVideoUrl={(url) => setForm({ ...form, video_url: url })}
-                currentImages={form.images}
-                currentVideo={form.video_url}
-              />
+            <Input
+              placeholder="Slug (auto se vazio)"
+              value={form.slug}
+              onChange={(e) => setForm({ ...form, slug: e.target.value })}
+            />
+          </div>
+
+          <div>
+            <label className="text-sm font-medium mb-2 block">Imagens (URLs)</label>
+            <div className="space-y-2">
+              {form.images.map((img, i) => (
+                <div key={i} className="flex gap-2">
+                  <Input
+                    placeholder="URL da imagem"
+                    value={img}
+                    onChange={(e) => updateImage(i, e.target.value)}
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => removeImage(i)}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))}
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={addImage}
+              >
+                <Plus className="h-4 w-4 mr-1" /> Adicionar imagem
+              </Button>
             </div>
           </div>
+
+          <Input
+            placeholder="URL do vídeo (YouTube, Vimeo, etc) - Opcional"
+            value={form.video_url}
+            onChange={(e) => setForm({ ...form, video_url: e.target.value })}
+          />
+
           <Textarea
             placeholder="Descrição"
             value={form.description}
             onChange={(e) => setForm({ ...form, description: e.target.value })}
+            rows={4}
           />
           <div className="flex flex-wrap gap-4">
             <label className="flex items-center gap-2 text-sm cursor-pointer">

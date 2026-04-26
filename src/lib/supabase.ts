@@ -21,6 +21,7 @@ export interface Product {
   status: "disponivel" | "vendido" | "reservado";
   battery_percentage?: number;
   general_condition?: string;
+  slug?: string;
   images: string[];
   video_url?: string;
   specs: Record<string, string>;
