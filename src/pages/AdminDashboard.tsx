@@ -50,6 +50,9 @@ export default function AdminDashboard() {
     original_price: undefined as number | undefined,
     description: "",
     condition: "seminovo",
+    status: "disponivel",
+    battery_percentage: undefined as number | undefined,
+    general_condition: "",
     images: [] as string[],
     video_url: "",
     specs: {} as Record<string, string>,
@@ -119,6 +122,9 @@ export default function AdminDashboard() {
         original_price: form.original_price || null,
         description: form.description,
         condition: form.condition,
+        status: form.status,
+        battery_percentage: form.battery_percentage || null,
+        general_condition: form.general_condition || null,
         images: form.images.filter((i) => i.trim()),
         video_url: form.video_url || null,
         specs: form.specs,
@@ -163,6 +169,9 @@ export default function AdminDashboard() {
       original_price: product.original_price,
       description: product.description,
       condition: product.condition,
+      status: (product as any).status || "disponivel",
+      battery_percentage: (product as any).battery_percentage,
+      general_condition: (product as any).general_condition || "",
       images: product.images && product.images.length ? product.images : [],
       video_url: product.video_url || "",
       specs: product.specs,
@@ -201,6 +210,9 @@ export default function AdminDashboard() {
       original_price: undefined,
       description: "",
       condition: "seminovo",
+      status: "disponivel",
+      battery_percentage: undefined,
+      general_condition: "",
       images: [],
       video_url: "",
       specs: {},
@@ -415,6 +427,37 @@ export default function AdminDashboard() {
                 ))}
               </SelectContent>
             </Select>
+            <Select
+              value={form.status}
+              onValueChange={(v) => setForm({ ...form, status: v as any })}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="disponivel">Disponível</SelectItem>
+                <SelectItem value="vendido">Vendido</SelectItem>
+                <SelectItem value="reservado">Reservado</SelectItem>
+              </SelectContent>
+            </Select>
+            <Input
+              type="number"
+              placeholder="Bateria (%)"
+              min="0"
+              max="100"
+              value={form.battery_percentage || ""}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  battery_percentage: Number(e.target.value) || undefined,
+                })
+              }
+            />
+            <Input
+              placeholder="Estado Geral (ex: Excelente, sem marcas)"
+              value={form.general_condition}
+              onChange={(e) => setForm({ ...form, general_condition: e.target.value })}
+            />
             <div className="md:col-span-2">
               <ImageUpload
                 onImagesUrls={(urls) => setForm({ ...form, images: urls })}
@@ -490,6 +533,9 @@ export default function AdminDashboard() {
                   Condição
                 </th>
                 <th className="text-left p-3 font-medium hidden md:table-cell">
+                  Status
+                </th>
+                <th className="text-left p-3 font-medium hidden md:table-cell">
                   Views
                 </th>
                 <th className="text-right p-3 font-medium">Ações</th>
@@ -498,7 +544,7 @@ export default function AdminDashboard() {
             <tbody>
               {products.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="p-8 text-center text-muted-foreground">
+                  <td colSpan={7} className="p-8 text-center text-muted-foreground">
                     Nenhum produto cadastrado
                   </td>
                 </tr>
@@ -517,6 +563,15 @@ export default function AdminDashboard() {
                     </td>
                     <td className="p-3 hidden md:table-cell">
                       <Badge variant="outline">{conditionLabel(p.condition)}</Badge>
+                    </td>
+                    <td className="p-3 hidden md:table-cell">
+                      <Badge variant={
+                        (p as any).status === "vendido" ? "destructive" :
+                        (p as any).status === "reservado" ? "secondary" : "default"
+                      }>
+                        {(p as any).status === "vendido" ? "Vendido" :
+                         (p as any).status === "reservado" ? "Reservado" : "Disponível"}
+                      </Badge>
                     </td>
                     <td className="p-3 hidden md:table-cell text-muted-foreground">
                       {p.views}
