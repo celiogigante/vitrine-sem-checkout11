@@ -50,7 +50,7 @@ export default function AdminDashboard() {
     original_price: undefined as number | undefined,
     description: "",
     condition: "seminovo",
-    status: "disponivel" as "disponivel" | "vendido",
+    status: "disponivel" as "disponivel" | "vendido" | "reservado",
     battery_percentage: undefined as number | undefined,
     general_condition: "",
     images: [] as string[],
@@ -373,259 +373,274 @@ export default function AdminDashboard() {
       {activeTab === "produtos" && (
         <>
           {showForm && (
-        <div className="mb-8 rounded-xl border bg-card p-6 space-y-6">
-          <h2 className="font-semibold text-lg">
-            {editing ? "Editar produto" : "Novo produto"}
-          </h2>
+            <div className="mb-8 rounded-xl border bg-card p-6 space-y-6">
+              <h2 className="font-semibold text-lg">
+                {editing ? "Editar produto" : "Novo produto"}
+              </h2>
 
-          {/* Básico */}
-          <div className="space-y-2">
-            <h3 className="font-medium text-sm text-muted-foreground">Informações Básicas</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Input
-                placeholder="Nome do produto"
-                value={form.name}
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
-              />
-              <Select value={form.brand} onValueChange={(v) => setForm({ ...form, brand: v })}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Selecione marca" />
-                </SelectTrigger>
-                <SelectContent>
-                  {brands.map((b) => (
-                    <SelectItem key={b} value={b}>
-                      {b}
-                    </SelectItem>
+              {/* Básico */}
+              <div className="space-y-2">
+                <h3 className="font-medium text-sm text-muted-foreground">Informações Básicas</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <Input
+                    placeholder="Nome do produto"
+                    value={form.name}
+                    onChange={(e) => setForm({ ...form, name: e.target.value })}
+                  />
+                  <Select value={form.brand} onValueChange={(v) => setForm({ ...form, brand: v })}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecione marca" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {brands.map((b) => (
+                        <SelectItem key={b} value={b}>
+                          {b}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              {/* Preços */}
+              <div className="space-y-2">
+                <h3 className="font-medium text-sm text-muted-foreground">Preços</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <Input
+                    type="number"
+                    placeholder="Preço (R$)"
+                    value={form.price || ""}
+                    onChange={(e) => setForm({ ...form, price: Number(e.target.value) })}
+                  />
+                  <Input
+                    type="number"
+                    placeholder="Preço original (opcional)"
+                    value={form.original_price || ""}
+                    onChange={(e) =>
+                      setForm({
+                        ...form,
+                        original_price: Number(e.target.value) || undefined,
+                      })
+                    }
+                  />
+                </div>
+              </div>
+
+              {/* Status e Condição */}
+              <div className="space-y-2">
+                <h3 className="font-medium text-sm text-muted-foreground">Status e Condição</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <Select value={form.status} onValueChange={(v) => setForm({ ...form, status: v as any })}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="disponivel">Disponível</SelectItem>
+                      <SelectItem value="vendido">Vendido</SelectItem>
+                      <SelectItem value="reservado">Reservado</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Select value={form.condition} onValueChange={(v) => setForm({ ...form, condition: v })}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Condição" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {CONDITIONS.map((c) => (
+                        <SelectItem key={c} value={c}>
+                          {conditionLabel(c)}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Input
+                    type="number"
+                    placeholder="Bateria (%)"
+                    min="0"
+                    max="100"
+                    value={form.battery_percentage || ""}
+                    onChange={(e) => setForm({ ...form, battery_percentage: Number(e.target.value) || undefined })}
+                  />
+                </div>
+                <Textarea
+                  placeholder="Estado geral do produto (ex: Sem arranhões, Vidro levemente marcado)"
+                  value={form.general_condition}
+                  onChange={(e) => setForm({ ...form, general_condition: e.target.value })}
+                  className="min-h-16"
+                />
+              </div>
+
+              {/* Mídia */}
+              <div className="space-y-2">
+                <h3 className="font-medium text-sm text-muted-foreground">Imagens e Vídeo</h3>
+                <ImageUpload
+                  onImagesUrls={(urls) => setForm({ ...form, images: urls })}
+                  onVideoUrl={(url) => setForm({ ...form, video_url: url })}
+                  currentImages={form.images}
+                  currentVideo={form.video_url}
+                />
+              </div>
+
+              {/* Descrição */}
+              <div className="space-y-2">
+                <h3 className="font-medium text-sm text-muted-foreground">Descrição</h3>
+                <Textarea
+                  placeholder="Descrição detalhada do produto"
+                  value={form.description}
+                  onChange={(e) => setForm({ ...form, description: e.target.value })}
+                  className="min-h-24"
+                />
+              </div>
+
+              {/* Especificações */}
+              <div className="space-y-2">
+                <h3 className="font-medium text-sm text-muted-foreground">Especificações</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {["RAM", "CHIP", "TELA", "BATERIA", "CÂMERA", "ARMAZENAMENTO"].map((key) => (
+                    <Input
+                      key={key}
+                      placeholder={key}
+                      value={form.specs[key] || ""}
+                      onChange={(e) => setForm({ ...form, specs: { ...form.specs, [key]: e.target.value } })}
+                    />
                   ))}
-                </SelectContent>
-              </Select>
+                </div>
+              </div>
+
+              {/* Flags */}
+              <div className="space-y-2">
+                <h3 className="font-medium text-sm text-muted-foreground">Opções</h3>
+                <div className="flex flex-wrap gap-4">
+                  <label className="flex items-center gap-2 text-sm cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={form.featured}
+                      onChange={(e) => setForm({ ...form, featured: e.target.checked })}
+                    />
+                    Destaque
+                  </label>
+                  <label className="flex items-center gap-2 text-sm cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={form.promotion}
+                      onChange={(e) => setForm({ ...form, promotion: e.target.checked })}
+                    />
+                    Promoção
+                  </label>
+                  <label className="flex items-center gap-2 text-sm cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={form.is_on_request}
+                      onChange={(e) => setForm({ ...form, is_on_request: e.target.checked })}
+                    />
+                    Por Pedido (até 3 dias úteis)
+                  </label>
+                </div>
+              </div>
+
+              {/* Botões */}
+              <div className="flex gap-2 pt-4">
+                <Button onClick={handleSave} disabled={isSaving}>
+                  {isSaving ? (
+                    <>
+                      <Loader2 className="mr-1 h-4 w-4 animate-spin" />
+                      Salvando...
+                    </>
+                  ) : editing ? (
+                    "Salvar Alterações"
+                  ) : (
+                    "Adicionar Produto"
+                  )}
+                </Button>
+                <Button variant="outline" onClick={resetForm}>
+                  Cancelar
+                </Button>
+              </div>
             </div>
-          </div>
+          )}
 
-          {/* Preços */}
-          <div className="space-y-2">
-            <h3 className="font-medium text-sm text-muted-foreground">Preços</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Input
-                type="number"
-                placeholder="Preço (R$)"
-                value={form.price || ""}
-                onChange={(e) => setForm({ ...form, price: Number(e.target.value) })}
-              />
-              <Input
-                type="number"
-                placeholder="Preço original (opcional)"
-                value={form.original_price || ""}
-                onChange={(e) =>
-                  setForm({
-                    ...form,
-                    original_price: Number(e.target.value) || undefined,
-                  })
-                }
-              />
-            </div>
-          </div>
-
-          {/* Status e Condição */}
-          <div className="space-y-2">
-            <h3 className="font-medium text-sm text-muted-foreground">Status e Condição</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Select value={form.status} onValueChange={(v) => setForm({ ...form, status: v as any })}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="disponivel">Disponível</SelectItem>
-                  <SelectItem value="vendido">Vendido</SelectItem>
-                </SelectContent>
-              </Select>
-              <Select value={form.condition} onValueChange={(v) => setForm({ ...form, condition: v })}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Condição" />
-                </SelectTrigger>
-                <SelectContent>
-                  {CONDITIONS.map((c) => (
-                    <SelectItem key={c} value={c}>
-                      {conditionLabel(c)}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <Input
-                type="number"
-                placeholder="Bateria (%)"
-                value={form.battery_percentage || ""}
-                onChange={(e) => setForm({ ...form, battery_percentage: Number(e.target.value) || undefined })}
-              />
-            </div>
-            <Textarea
-              placeholder="Estado geral do produto (ex: Sem arranhões, Vidro levemente marcado)"
-              value={form.general_condition}
-              onChange={(e) => setForm({ ...form, general_condition: e.target.value })}
-              className="min-h-16"
-            />
-          </div>
-
-          {/* Mídia */}
-          <div className="space-y-2">
-            <h3 className="font-medium text-sm text-muted-foreground">Imagens e Vídeo</h3>
-            <ImageUpload
-              onImagesUrls={(urls) => setForm({ ...form, images: urls })}
-              onVideoUrl={(url) => setForm({ ...form, video_url: url })}
-              currentImages={form.images}
-              currentVideo={form.video_url}
-            />
-          </div>
-
-          {/* Descrição */}
-          <div className="space-y-2">
-            <h3 className="font-medium text-sm text-muted-foreground">Descrição</h3>
-            <Textarea
-              placeholder="Descrição detalhada do produto"
-              value={form.description}
-              onChange={(e) => setForm({ ...form, description: e.target.value })}
-              className="min-h-24"
-            />
-          </div>
-
-          {/* Especificações */}
-          <div className="space-y-2">
-            <h3 className="font-medium text-sm text-muted-foreground">Especificações</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              {["RAM", "CHIP", "TELA", "BATERIA", "CÂMERA", "ARMAZENAMENTO"].map((key) => (
-                <Input
-                  key={key}
-                  placeholder={key}
-                  value={form.specs[key] || ""}
-                  onChange={(e) => setForm({ ...form, specs: { ...form.specs, [key]: e.target.value } })}
-                />
-              ))}
-            </div>
-          </div>
-
-          {/* Flags */}
-          <div className="space-y-2">
-            <h3 className="font-medium text-sm text-muted-foreground">Opções</h3>
-            <div className="flex flex-wrap gap-4">
-              <label className="flex items-center gap-2 text-sm cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={form.featured}
-                  onChange={(e) => setForm({ ...form, featured: e.target.checked })}
-                />
-                Destaque
-              </label>
-              <label className="flex items-center gap-2 text-sm cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={form.promotion}
-                  onChange={(e) => setForm({ ...form, promotion: e.target.checked })}
-                />
-                Promoção
-              </label>
-              <label className="flex items-center gap-2 text-sm cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={form.is_on_request}
-                  onChange={(e) => setForm({ ...form, is_on_request: e.target.checked })}
-                />
-                Por Pedido (até 3 dias úteis)
-              </label>
-            </div>
-          </div>
-
-          {/* Botões */}
-          <div className="flex gap-2 pt-4">
-            <Button onClick={handleSave} disabled={isSaving}>
-              {isSaving ? (
-                <>
-                  <Loader2 className="mr-1 h-4 w-4 animate-spin" />
-                  Salvando...
-                </>
-              ) : editing ? (
-                "Salvar Alterações"
-              ) : (
-                "Adicionar Produto"
-              )}
-            </Button>
-            <Button variant="outline" onClick={resetForm}>
-              Cancelar
-            </Button>
-          </div>
-        </div>
-      )}
-
-      {/* Product list */}
-      <div className="rounded-xl border bg-card overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead className="border-b bg-secondary">
-              <tr>
-                <th className="text-left p-3 font-medium">Produto</th>
-                <th className="text-left p-3 font-medium hidden md:table-cell">
-                  Marca
-                </th>
-                <th className="text-left p-3 font-medium">Preço</th>
-                <th className="text-left p-3 font-medium hidden md:table-cell">
-                  Condição
-                </th>
-                <th className="text-left p-3 font-medium hidden md:table-cell">
-                  Views
-                </th>
-                <th className="text-right p-3 font-medium">Ações</th>
-              </tr>
-            </thead>
-            <tbody>
-              {products.length === 0 ? (
-                <tr>
-                  <td colSpan={6} className="p-8 text-center text-muted-foreground">
-                    Nenhum produto cadastrado
-                  </td>
-                </tr>
-              ) : (
-                products.map((p) => (
-                  <tr
-                    key={p.id}
-                    className="border-b last:border-0 hover:bg-secondary/50"
-                  >
-                    <td className="p-3 font-medium">{p.name}</td>
-                    <td className="p-3 hidden md:table-cell text-muted-foreground">
-                      {p.brand}
-                    </td>
-                    <td className="p-3">
-                      R$ {p.price.toLocaleString("pt-BR")}
-                    </td>
-                    <td className="p-3 hidden md:table-cell">
-                      <Badge variant="outline">{conditionLabel(p.condition)}</Badge>
-                    </td>
-                    <td className="p-3 hidden md:table-cell text-muted-foreground">
-                      {p.views}
-                    </td>
-                    <td className="p-3 text-right">
-                      <div className="flex justify-end gap-1">
-                        <Button
-                          size="icon"
-                          variant="ghost"
-                          onClick={() => handleEdit(p)}
-                        >
-                          <Pencil className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          size="icon"
-                          variant="ghost"
-                          onClick={() => handleDelete(p.id)}
-                        >
-                          <Trash2 className="h-4 w-4 text-destructive" />
-                        </Button>
-                      </div>
-                    </td>
+          {/* Product list */}
+          <div className="rounded-xl border bg-card overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="border-b bg-secondary">
+                  <tr>
+                    <th className="text-left p-3 font-medium">Produto</th>
+                    <th className="text-left p-3 font-medium hidden md:table-cell">
+                      Marca
+                    </th>
+                    <th className="text-left p-3 font-medium">Preço</th>
+                    <th className="text-left p-3 font-medium hidden md:table-cell">
+                      Condição
+                    </th>
+                    <th className="text-left p-3 font-medium hidden md:table-cell">
+                      Status
+                    </th>
+                    <th className="text-left p-3 font-medium hidden md:table-cell">
+                      Views
+                    </th>
+                    <th className="text-right p-3 font-medium">Ações</th>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
+                </thead>
+                <tbody>
+                  {products.length === 0 ? (
+                    <tr>
+                      <td colSpan={7} className="p-8 text-center text-muted-foreground">
+                        Nenhum produto cadastrado
+                      </td>
+                    </tr>
+                  ) : (
+                    products.map((p) => (
+                      <tr
+                        key={p.id}
+                        className="border-b last:border-0 hover:bg-secondary/50"
+                      >
+                        <td className="p-3 font-medium">{p.name}</td>
+                        <td className="p-3 hidden md:table-cell text-muted-foreground">
+                          {p.brand}
+                        </td>
+                        <td className="p-3">
+                          R$ {p.price.toLocaleString("pt-BR")}
+                        </td>
+                        <td className="p-3 hidden md:table-cell">
+                          <Badge variant="outline">{conditionLabel(p.condition)}</Badge>
+                        </td>
+                        <td className="p-3 hidden md:table-cell">
+                          <Badge variant={
+                            (p as any).status === "vendido" ? "destructive" :
+                            (p as any).status === "reservado" ? "secondary" : "default"
+                          }>
+                            {(p as any).status === "vendido" ? "Vendido" :
+                             (p as any).status === "reservado" ? "Reservado" : "Disponível"}
+                          </Badge>
+                        </td>
+                        <td className="p-3 hidden md:table-cell text-muted-foreground">
+                          {p.views}
+                        </td>
+                        <td className="p-3 text-right">
+                          <div className="flex justify-end gap-1">
+                            <Button
+                              size="icon"
+                              variant="ghost"
+                              onClick={() => handleEdit(p)}
+                            >
+                              <Pencil className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              size="icon"
+                              variant="ghost"
+                              onClick={() => handleDelete(p.id)}
+                            >
+                              <Trash2 className="h-4 w-4 text-destructive" />
+                            </Button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </>
       )}
     </div>
