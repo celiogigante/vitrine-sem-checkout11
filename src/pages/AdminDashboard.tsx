@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/lib/authContext";
-import { Product } from "@/lib/supabase";
+import { getProducts, updateProduct, deleteProduct, addProduct, BRANDS, type Product } from "@/lib/products";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -68,31 +67,14 @@ export default function AdminDashboard() {
   const loadProducts = async () => {
     try {
       setIsLoading(true);
-      const { data, error } = await supabase.from("products").select("*");
-
-      if (error) throw error;
-
-      const productList = (data || []) as Product[];
+      const productList = getProducts();
       setProducts(productList);
 
-      // Load brands from brands table
-      const { data: brandsData, error: brandsError } = await supabase
-        .from("brands")
-        .select("name")
-        .eq("is_visible", true)
-        .order("order_index");
-
-      if (brandsError) {
-        console.warn("Brands table error, extracting from products:", brandsError);
-        // Fallback: extract from products if brands table doesn't exist yet
-        const uniqueBrands = Array.from(new Set(productList.map(p => p.brand)))
-          .filter(Boolean)
-          .sort();
-        setBrands(uniqueBrands.length > 0 ? uniqueBrands : ["Apple", "Samsung", "Xiaomi", "LG", "Motorola"]);
-      } else {
-        const uniqueBrands = (brandsData || []).map(b => b.name);
-        setBrands(uniqueBrands.length > 0 ? uniqueBrands : ["Apple", "Samsung", "Xiaomi", "LG", "Motorola"]);
-      }
+      // Extract brands from products
+      const uniqueBrands = Array.from(new Set(productList.map(p => p.brand)))
+        .filter(Boolean)
+        .sort();
+      setBrands(uniqueBrands.length > 0 ? uniqueBrands : BRANDS);
     } catch (err) {
       console.error("Error loading products:", err);
       toast({
@@ -119,32 +101,24 @@ export default function AdminDashboard() {
         name: form.name,
         brand: form.brand,
         price: form.price,
-        original_price: form.original_price || null,
+        originalPrice: form.original_price || undefined,
         description: form.description,
         condition: form.condition,
         status: form.status,
-        battery_percentage: form.battery_percentage || null,
-        general_condition: form.general_condition || null,
+        battery: form.battery_percentage || undefined,
+        generalState: form.general_condition || "",
         images: form.images.filter((i) => i.trim()),
-        video_url: form.video_url || null,
+        videoUrl: form.video_url || undefined,
         specs: form.specs,
         featured: form.featured,
         promotion: form.promotion,
-        is_on_request: form.is_on_request,
       };
 
       if (editing) {
-        const { error } = await supabase
-          .from("products")
-          .update(productData)
-          .eq("id", editing);
-
-        if (error) throw error;
+        updateProduct(editing, productData);
         toast({ title: "Produto atualizado!" });
       } else {
-        const { error } = await supabase.from("products").insert([productData]);
-
-        if (error) throw error;
+        addProduct(productData);
         toast({ title: "Produto adicionado!" });
       }
 
@@ -166,14 +140,14 @@ export default function AdminDashboard() {
       name: product.name,
       brand: product.brand,
       price: product.price,
-      original_price: product.original_price,
+      original_price: (product as any).originalPrice || undefined,
       description: product.description,
       condition: product.condition,
-      status: (product as any).status || "disponivel",
-      battery_percentage: (product as any).battery_percentage || undefined,
-      general_condition: (product as any).general_condition || "",
+      status: product.status || "disponivel",
+      battery_percentage: (product as any).battery || undefined,
+      general_condition: (product as any).generalState || "",
       images: product.images && product.images.length ? product.images : [],
-      video_url: product.video_url || "",
+      video_url: (product as any).videoUrl || "",
       specs: product.specs,
       featured: product.featured,
       promotion: product.promotion,
@@ -183,14 +157,11 @@ export default function AdminDashboard() {
     setShowForm(true);
   };
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = (id: string) => {
     if (!confirm("Tem certeza que deseja deletar este produto?")) return;
 
     try {
-      const { error } = await supabase.from("products").delete().eq("id", id);
-
-      if (error) throw error;
-
+      deleteProduct(id);
       setProducts(products.filter((p) => p.id !== id));
       toast({ title: "Produto removido" });
     } catch (err) {
