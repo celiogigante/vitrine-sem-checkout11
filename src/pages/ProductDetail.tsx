@@ -112,11 +112,11 @@ const ProductDetail = () => {
         <div className="space-y-3 md:space-y-4">
           {product.images.length > 0 ? (
             <>
-              <div className={`aspect-square overflow-hidden rounded-lg md:rounded-xl border bg-secondary transition-opacity ${sold ? "opacity-70" : ""}`}>
+              <div className={`aspect-square overflow-hidden rounded-lg md:rounded-xl border bg-gradient-to-b from-gray-800 to-gray-900 transition-opacity flex items-center justify-center ${sold ? "opacity-70" : ""}`}>
                 <img
                   src={product.images[selectedImage]}
                   alt={product.name}
-                  className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
+                  className="h-full w-full object-contain transition-transform duration-300 hover:scale-105"
                   loading="lazy"
                 />
               </div>
@@ -126,9 +126,9 @@ const ProductDetail = () => {
                     <button
                       key={i}
                       onClick={() => setSelectedImage(i)}
-                      className={`flex-shrink-0 h-14 w-14 md:h-16 md:w-16 rounded-lg border overflow-hidden transition-all ${i === selectedImage ? "ring-2 ring-yellow-400 scale-105" : "hover:scale-105"}`}
+                      className={`flex-shrink-0 h-14 w-14 md:h-16 md:w-16 rounded-lg border overflow-hidden transition-all bg-gray-800 flex items-center justify-center ${i === selectedImage ? "ring-2 ring-yellow-400 scale-105" : "hover:scale-105"}`}
                     >
-                      <img src={img} alt="" className="h-full w-full object-cover" />
+                      <img src={img} alt="" className="h-full w-full object-contain" />
                     </button>
                   ))}
                 </div>
