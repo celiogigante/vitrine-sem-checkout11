@@ -15,7 +15,7 @@ const FloatingWhatsAppButton = () => {
       href={`https://wa.me/${num}`}
       target="_blank"
       rel="noopener noreferrer"
-      className="fixed bottom-32 right-6 z-40 inline-block transition-transform hover:scale-110 animate-float-bounce"
+      className="fixed bottom-20 right-6 z-40 inline-block transition-transform hover:scale-110 animate-float-bounce"
       aria-label="Contato via WhatsApp"
       title="WhatsApp"
     >
