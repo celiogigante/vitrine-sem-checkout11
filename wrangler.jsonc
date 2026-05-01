@@ -1,22 +1,8 @@
 {
   "name": "mastercellbg",
-  "type": "javascript",
+  "main": "src/index.ts",
   "compatibility_date": "2026-05-01",
-  "env": {
-    "production": {
-      "routes": [
-        {
-          "pattern": "mastercellbg.workers.dev",
-          "zone_name": "workers.dev"
-        }
-      ]
-    }
-  },
   "assets": {
-    "directory": "./dist",
-    "binding": "ASSETS"
-  },
-  "site": {
-    "bucket": "./dist"
+    "directory": "./dist"
   }
 }
