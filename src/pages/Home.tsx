@@ -152,10 +152,10 @@ const Home = () => {
           <h2 className="text-2xl font-bold text-white">Em destaque</h2>
 
           {/* Mobile columns toggle - Only visible on mobile */}
-          <div className="md:hidden flex gap-2">
+          <div className="md:hidden flex gap-0">
             <button
               onClick={() => setMobileColumns(2)}
-              className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
+              className={`px-3 py-1 rounded-l-md text-sm font-medium transition-colors ${
                 mobileColumns === 2
                   ? "bg-white text-black"
                   : "bg-gray-700 text-white hover:bg-gray-600"
@@ -165,7 +165,7 @@ const Home = () => {
             </button>
             <button
               onClick={() => setMobileColumns(1)}
-              className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
+              className={`px-3 py-1 rounded-r-md text-sm font-medium transition-colors ${
                 mobileColumns === 1
                   ? "bg-white text-black"
                   : "bg-gray-700 text-white hover:bg-gray-600"
@@ -195,10 +195,10 @@ const Home = () => {
           <h2 className="text-2xl font-bold text-white">Vitrine</h2>
 
           {/* Mobile columns toggle - Only visible on mobile */}
-          <div className="md:hidden flex gap-2">
+          <div className="md:hidden flex gap-0">
             <button
               onClick={() => setMobileColumns(2)}
-              className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
+              className={`px-3 py-1 rounded-l-md text-sm font-medium transition-colors ${
                 mobileColumns === 2
                   ? "bg-white text-black"
                   : "bg-gray-700 text-white hover:bg-gray-600"
@@ -208,7 +208,7 @@ const Home = () => {
             </button>
             <button
               onClick={() => setMobileColumns(1)}
-              className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
+              className={`px-3 py-1 rounded-r-md text-sm font-medium transition-colors ${
                 mobileColumns === 1
                   ? "bg-white text-black"
                   : "bg-gray-700 text-white hover:bg-gray-600"

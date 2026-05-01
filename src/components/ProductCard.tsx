@@ -3,13 +3,12 @@ import {
   Product,
   conditionLabel,
   conditionColor,
-  getWhatsAppLink,
   statusLabel,
   statusColor
 } from "@/lib/products";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { MessageCircle, Eye } from "lucide-react";
+import { Eye } from "lucide-react";
 import { recordProductClick } from "@/hooks/useProductClick";
 
 const ProductCard = ({ product }: { product: Product }) => {
@@ -17,10 +16,6 @@ const ProductCard = ({ product }: { product: Product }) => {
 
   const handleViewDetailsClick = () => {
     recordProductClick(product.id, { type: "product_card" });
-  };
-
-  const handleWhatsAppClick = () => {
-    recordProductClick(product.id, { type: "whatsapp" });
   };
 
   return (
@@ -93,19 +88,6 @@ const ProductCard = ({ product }: { product: Product }) => {
           <Button asChild size="sm" variant="outline" className="flex-1 h-9" onClick={handleViewDetailsClick}>
             <Link to={`/produto/${product.id}`}>Ver detalhes</Link>
           </Button>
-
-          {!sold && (
-            <Button
-              size="sm"
-              className="bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground h-9 w-9 flex-shrink-0"
-              onClick={() => {
-                handleWhatsAppClick();
-                window.open(getWhatsAppLink(product), "_blank");
-              }}
-            >
-              <MessageCircle className="h-4 w-4" />
-            </Button>
-          )}
         </div>
       </div>
     </div>

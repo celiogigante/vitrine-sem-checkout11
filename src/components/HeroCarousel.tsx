@@ -157,7 +157,7 @@ export default function HeroCarousel() {
         <>
           <button
             onClick={goToPrevious}
-            className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white rounded-full p-2 transition-all"
+            className="absolute left-6 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white rounded-full p-2 transition-all"
             aria-label="Previous"
           >
             <ChevronLeft className="h-6 w-6 text-gray-900" />
@@ -165,7 +165,7 @@ export default function HeroCarousel() {
 
           <button
             onClick={goToNext}
-            className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white rounded-full p-2 transition-all"
+            className="absolute right-6 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white rounded-full p-2 transition-all"
             aria-label="Next"
           >
             <ChevronRight className="h-6 w-6 text-gray-900" />
