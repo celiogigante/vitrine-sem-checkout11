@@ -38,7 +38,7 @@ const FloatingButtons = () => {
         aria-label="Localização no Google Maps"
         title="Localização"
       >
-        <MapPin className="h-6 w-6 text-white" />
+        <MapPin className="h-5 w-5 text-white" />
       </a>
     </div>
   );
