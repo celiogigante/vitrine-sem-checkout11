@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { ArrowUp, MapPin } from "lucide-react";
+import { MapPin } from "lucide-react";
 import { getSettings } from "@/lib/products";
 
 const FloatingButtons = () => {
@@ -10,13 +10,6 @@ const FloatingButtons = () => {
     window.addEventListener("settings-updated", handleSettings);
     return () => window.removeEventListener("settings-updated", handleSettings);
   }, []);
-
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
 
   return (
     <div className="fixed bottom-6 right-6 z-40 flex flex-col gap-4">
@@ -47,16 +40,6 @@ const FloatingButtons = () => {
       >
         <MapPin className="h-7 w-7 text-white" />
       </a>
-
-      {/* Scroll to Top Button */}
-      <button
-        onClick={scrollToTop}
-        className="flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-transform hover:scale-110 bg-blue-500 hover:bg-blue-600"
-        aria-label="Scroll to top"
-        title="Voltar ao topo"
-      >
-        <ArrowUp className="h-7 w-7 text-white" />
-      </button>
     </div>
   );
 };
