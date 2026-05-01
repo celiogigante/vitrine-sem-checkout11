@@ -152,7 +152,7 @@ const Home = () => {
           <h2 className="text-2xl font-bold text-white">Em destaque</h2>
 
           {/* Mobile columns toggle - Only visible on mobile */}
-          <div className="md:hidden flex gap-2">
+          <div className="md:hidden flex gap-0">
             <button
               onClick={() => setMobileColumns(2)}
               className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
@@ -195,7 +195,7 @@ const Home = () => {
           <h2 className="text-2xl font-bold text-white">Vitrine</h2>
 
           {/* Mobile columns toggle - Only visible on mobile */}
-          <div className="md:hidden flex gap-2">
+          <div className="md:hidden flex gap-0">
             <button
               onClick={() => setMobileColumns(2)}
               className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
