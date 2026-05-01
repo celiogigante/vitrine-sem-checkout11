@@ -1,8 +1,9 @@
 import { Outlet } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
-import FloatingButtons from "./FloatingButtons";
 import ScrollToTop from "./ScrollToTop";
+import FloatingWhatsAppButton from "./FloatingWhatsAppButton";
+import FloatingMapsButton from "./FloatingMapsButton";
 
 const Layout = () => (
   <div className="flex min-h-screen flex-col">
@@ -11,8 +12,9 @@ const Layout = () => (
       <Outlet />
     </main>
     <Footer />
-    <FloatingButtons />
     <ScrollToTop />
+    <FloatingWhatsAppButton />
+    <FloatingMapsButton />
   </div>
 );
 
