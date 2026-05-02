@@ -42,6 +42,7 @@ const Home = () => {
   const [brands, setBrands] = useState<string[]>([]);
   const [heroConfig, setHeroConfig] = useState<HeroConfig | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [mobileColumns, setMobileColumns] = useState<1 | 2>(1);
 
   useEffect(() => {
@@ -51,55 +52,108 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
+    // Diagnostic: Check Supabase connectivity
+    console.log("Home component mounted, testing Supabase connection...");
+
+    // Test basic fetch to Supabase
+    const testUrl = import.meta.env.VITE_SUPABASE_URL;
+    if (testUrl) {
+      fetch(`${testUrl}/rest/v1/`, {
+        headers: {
+          "apikey": import.meta.env.VITE_SUPABASE_ANON_KEY || "",
+        }
+      })
+        .then(r => {
+          console.log("Supabase connectivity test:", r.status);
+        })
+        .catch(err => {
+          console.error("Supabase connectivity test failed:", err);
+        });
+    }
+
     loadData();
   }, []);
 
   const loadData = async () => {
     try {
       setIsLoading(true);
+      setLoadError(null);
 
-      // Load products
-      const { data: productsData, error: productsError } = await supabase
-        .from("products")
-        .select("*")
-        .order("created_at", { ascending: false });
+      // Load products with retry logic
+      let productsData = null;
+      let productsError = null;
 
-      if (productsError) throw productsError;
+      try {
+        const response = await supabase
+          .from("products")
+          .select("*")
+          .order("created_at", { ascending: false });
+        productsData = response.data;
+        productsError = response.error;
+      } catch (fetchErr) {
+        console.error("Network error loading products:", fetchErr);
+        productsError = fetchErr as any;
+      }
+
+      if (productsError) {
+        console.error("Erro ao carregar produtos:", productsError);
+        setLoadError("Não foi possível carregar os produtos. Verifique sua conexão com a internet ou tente novamente em alguns momentos.");
+        setProducts([]);
+        setBrands([]);
+        return;
+      }
+
       const productList = (productsData || []) as Product[];
       setProducts(productList);
 
       // Load brands from brands table
-      const { data: brandsData, error: brandsError } = await supabase
-        .from("brands")
-        .select("name")
-        .eq("is_visible", true)
-        .order("order_index");
+      try {
+        const { data: brandsData, error: brandsError } = await supabase
+          .from("brands")
+          .select("name")
+          .eq("is_visible", true)
+          .order("order_index");
 
-      if (brandsError) {
-        // Fallback: extract from products if brands table doesn't exist yet
+        if (brandsError) {
+          // Fallback: extract from products if brands table doesn't exist yet
+          const uniqueBrands = Array.from(new Set(productList.map(p => p.brand)))
+            .filter(Boolean)
+            .sort();
+          setBrands(uniqueBrands);
+        } else {
+          const uniqueBrands = (brandsData || []).map(b => b.name).sort();
+          setBrands(uniqueBrands);
+        }
+      } catch (err) {
+        console.error("Erro ao carregar brands:", err);
+        // Fallback to extracting from products
         const uniqueBrands = Array.from(new Set(productList.map(p => p.brand)))
           .filter(Boolean)
           .sort();
         setBrands(uniqueBrands);
-      } else {
-        const uniqueBrands = (brandsData || []).map(b => b.name).sort();
-        setBrands(uniqueBrands);
       }
 
       // Load hero config
-      const { data: configData, error: configError } = await supabase
-        .from("hero_config")
-        .select("*")
-        .limit(1)
-        .single();
+      try {
+        const { data: configData, error: configError } = await supabase
+          .from("hero_config")
+          .select("*")
+          .limit(1)
+          .single();
 
-      if (configError && configError.code !== "PGRST116") throw configError;
+        if (configError && configError.code !== "PGRST116") {
+          console.error("Erro ao carregar config do hero:", configError);
+        }
 
-      if (configData) {
-        setHeroConfig(configData as HeroConfig);
+        if (configData) {
+          setHeroConfig(configData as HeroConfig);
+        }
+      } catch (err) {
+        console.error("Erro ao carregar hero config:", err);
       }
     } catch (err) {
-      console.error("Erro ao carregar dados:", err);
+      console.error("Erro inesperado ao carregar dados:", err);
+      setLoadError("Erro ao carregar dados. Verifique sua conexão com a internet.");
     } finally {
       setIsLoading(false);
     }
@@ -118,6 +172,23 @@ const Home = () => {
 
   return (
     <div>
+      {/* Error Banner */}
+      {loadError && (
+        <div className="bg-red-900/80 text-red-100 p-4">
+          <div className="container mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p>{loadError}</p>
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() => loadData()}
+              className="whitespace-nowrap"
+            >
+              Tentar Novamente
+            </Button>
+          </div>
+        </div>
+      )}
+
       {/* Hero */}
       <section className="relative overflow-hidden text-white bg-black pt-6" style={{ minHeight: "576px" }}>
         <div className="container mx-auto px-4 py-0 relative h-full">
