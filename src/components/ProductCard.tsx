@@ -74,11 +74,18 @@ const ProductCard = ({ product }: { product: Product }) => {
 
           <div className="flex items-baseline gap-2">
             {product.originalPrice && (
-              <span className="text-xs text-muted-foreground line-through">
-                R$ {product.originalPrice.toLocaleString("pt-BR")}
-              </span>
+              <>
+                <span className="text-xs text-muted-foreground line-through">
+                  R$ {product.originalPrice.toLocaleString("pt-BR")}
+                </span>
+                {product.promotion && (
+                  <span className="text-xs font-bold text-destructive">
+                    -{Math.round((1 - product.price / product.originalPrice) * 100)}%
+                  </span>
+                )}
+              </>
             )}
-            <span className="text-lg font-bold">
+            <span className={`text-lg font-bold ${product.promotion ? 'text-green-500' : ''}`}>
               R$ {product.price.toLocaleString("pt-BR")}
             </span>
           </div>
