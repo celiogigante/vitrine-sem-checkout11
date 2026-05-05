@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import ProductCard from "@/components/ProductCard";
 import { conditionLabel } from "@/lib/productHelpers";
 import { getProducts, type Product } from "@/lib/products";
+import { supabase } from "@/lib/supabase";
 
 const CONDITIONS = ["novo", "seminovo", "excelente", "bom", "regular"] as const;
 
@@ -29,11 +30,16 @@ const Products = () => {
       const productList = await getProducts();
       setProducts(productList);
 
-      // Extract brands from products
-      const uniqueBrands = Array.from(new Set(productList.map(p => p.brand)))
-        .filter(Boolean)
-        .sort();
-      setBrands(uniqueBrands);
+      // Load brands from brands table
+      const { data: brandsData } = await supabase
+        .from("brands")
+        .select("name")
+        .eq("is_visible", true)
+        .order("order_index");
+
+      if (brandsData) {
+        setBrands(brandsData.map(b => b.name));
+      }
     } catch (err) {
       console.error("Erro ao carregar produtos:", err);
     } finally {
