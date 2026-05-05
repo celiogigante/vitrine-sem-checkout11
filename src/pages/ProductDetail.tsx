@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { conditionLabel, conditionColor, getWhatsAppLink, statusLabel, statusColor, type Product, getProduct, incrementViews } from "@/lib/products";
 import { recordProductClick, recordProductView } from "@/hooks/useProductClick";
+import "@/styles/gallery-slide.css";
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -84,9 +85,10 @@ const ProductDetail = () => {
             <>
               <div className={`w-full aspect-[9/16] overflow-hidden rounded-lg md:rounded-xl border bg-gradient-to-b from-gray-800 to-gray-900 transition-opacity flex items-center justify-center ${sold ? "opacity-70" : ""}`}>
                 <img
+                  key={selectedImage}
                   src={product.images[selectedImage]}
                   alt={product.name}
-                  className="w-full h-full object-contain transition-transform duration-300 hover:scale-105"
+                  className="w-full h-full object-contain transition-transform duration-300 hover:scale-105 gallery-slide-animation"
                   loading="lazy"
                 />
               </div>

@@ -35,6 +35,29 @@ interface HeroConfig {
   carousel_title: string;
 }
 
+const transformProduct = (product: any): Product => {
+  return {
+    id: product.id,
+    name: product.name,
+    brand: product.brand,
+    price: product.price,
+    originalPrice: product.original_price,
+    description: product.description,
+    condition: product.condition,
+    status: product.status,
+    battery: product.battery_percentage,
+    generalState: product.general_condition,
+    images: product.images || [],
+    videoUrl: product.video_url,
+    specs: product.specs || {},
+    featured: product.featured,
+    promotion: product.promotion,
+    isOnRequest: product.is_on_request,
+    views: product.views || 0,
+    createdAt: product.created_at,
+  };
+};
+
 const Home = () => {
   const [s, setS] = useState(getSettings());
   const [brandFilter, setBrandFilter] = useState<string>("all");
@@ -103,7 +126,7 @@ const Home = () => {
         return;
       }
 
-      const productList = (productsData || []) as Product[];
+      const productList = (productsData || []).map(transformProduct);
       setProducts(productList);
 
       // Load brands from brands table
