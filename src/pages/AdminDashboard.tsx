@@ -72,11 +72,17 @@ export default function AdminDashboard() {
       const productList = await getProducts();
       setProducts(productList);
 
-      // Extract brands from products
-      const uniqueBrands = Array.from(new Set(productList.map(p => p.brand)))
-        .filter(Boolean)
-        .sort();
-      setBrands(uniqueBrands.length > 0 ? uniqueBrands : BRANDS);
+      // Load brands from brands table
+      const { data: brandsData } = await supabase
+        .from("brands")
+        .select("name")
+        .order("order_index");
+
+      if (brandsData && brandsData.length > 0) {
+        setBrands(brandsData.map(b => b.name));
+      } else {
+        setBrands(BRANDS);
+      }
     } catch (err) {
       console.error("Error loading products:", err);
       toast({
